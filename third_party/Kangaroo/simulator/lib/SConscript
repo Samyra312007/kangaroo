@@ -1,0 +1,3 @@
+# lib/ is headers-only (csv.h, json.hpp, zipf.h) and compiles no translation
+# units. The upstream SConscript still asks for this file, so it is provided
+# here as a no-op to make the tree buildable. See docs/phase1.md (build fixes).

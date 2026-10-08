@@ -1,0 +1,32 @@
+# Libraries
+libraries = ['config++']
+# '-include cstdint': the legacy sources use uint64_t/uint32_t without including
+# <cstdint>; older toolchains pulled it in transitively, modern g++ (13) does not.
+cppFlags = ['-Wall', '-march=native', '-mcmodel=medium', '-fPIC', '-ffast-math', '-funroll-loops', '-include', 'cstdint']
+cxxFlags = ['-std=c++14', '-g', '-O3']
+cppPath = ['.']
+libPath = []
+
+# Local build fix: locate a project-local libconfig++ prefix when the system
+# library is unavailable (see scripts/setup-deps.sh and docs/phase1.md).
+import os
+_libcfg_include = os.environ.get('LIBCFG_INCLUDE')
+_libcfg_lib = os.environ.get('LIBCFG_LIB')
+if _libcfg_include:
+    cppPath.append(_libcfg_include)
+if _libcfg_lib:
+    libPath.append(_libcfg_lib)
+
+# Setup Environment
+env = Environment()
+env.Append(LIBS = libraries)
+env.Append(LIBPATH = libPath)
+env.Append(CPPFLAGS = cppFlags)
+env.Append(CXXFLAGS = cxxFlags)
+env.Append(CPPPATH = cppPath)
+# Embed an rpath so the binary finds the project-local libconfig++ without
+# requiring LD_LIBRARY_PATH at run time.
+if libPath:
+    env.Append(LINKFLAGS = ['-Wl,-rpath=%s' % p for p in libPath])
+
+env.SConscript('SConscript', {'env': env}, variant_dir='bin', duplicate=0)
