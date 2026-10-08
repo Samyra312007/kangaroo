@@ -1,0 +1,12 @@
+# Local build dependencies (created by scripts/setup-deps.sh)
+.deps/
+
+# Vendored simulator build artifacts
+third_party/Kangaroo/simulator/bin/
+third_party/Kangaroo/simulator/.sconsign.dblite
+third_party/Kangaroo/run-scripts/output/
+third_party/Kangaroo/run-scripts/configs/
+
+# Python
+__pycache__/
+*.pyc
