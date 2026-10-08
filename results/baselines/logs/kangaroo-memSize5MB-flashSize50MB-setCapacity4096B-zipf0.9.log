@@ -1,0 +1,22 @@
+Parser type: Zipf
+num requests: 10240000
+zipf objCount 1000000
+zipf debug objectCount 30 smallest bucket size 2 largest bucket size 160753 effective probability 2.07357e-07 theoretical probability 3.98107e-06
+Stats file at ./output/kangaroo-memSize5MB-flashSize50MB-setCapacity4096B-zipf0.9.out
+Setting not found: stats.collectionIntervalPower, using default value: 6
+Setting not found: sets.numHashFunctions, using default value: 1
+Miss Rate: -nan Flash Write Amp: -nan
+go: Generating 10240000 requests
+Miss Rate: 0.318253 Flash Write Amp: 64
+Miss Rate: 0.244564 Flash Write Amp: 64
+Miss Rate: 0.202229 Flash Write Amp: 64
+Miss Rate: 0.173162 Flash Write Amp: 64
+Miss Rate: 0.151654 Flash Write Amp: 64
+Miss Rate: 0.135169 Flash Write Amp: 64
+Miss Rate: 0.122318 Flash Write Amp: 64
+Miss Rate: 0.112036 Flash Write Amp: 64
+Miss Rate: 0.103735 Flash Write Amp: 64
+Miss Rate: 0.0969627 Flash Write Amp: 64
+
+Miss Rate: 0.0955194 Flash Write Amp: 64
+Processed 10240000 in 17 seconds, rate of 602353 accs/sec
