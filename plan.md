@@ -338,7 +338,7 @@ reproduced as trends); deviations explained (trace sampling, simulator approxima
 **Deliverable:** Green tests, sanitizer-clean run, report, reproducible runbook.
 **Verification:** `scripts/run-all.sh` passes from a clean checkout; no leaks/UB.
 
-### Phase 9 (optional) — On-flash CacheLib track + §5.5 production test
+### Phase 9 — On-flash CacheLib track + §5.5 production test
 **Tasks**
 1. Clone `CacheLib-1`; checkout `artifact-eval-kangaroo-upstream` (Kangaroo + SA) and
    `artifact-eval-log-only-upstream` (LS).
@@ -355,14 +355,7 @@ reproduced as trends); deviations explained (trace sampling, simulator approxima
 **Verification:** Needs a raw flash block device — **skip with a documented limitation if no HW**.
 
 ---
-
-## 6. Extension Features (beyond the paper) — Phases 10 & 11
-
-The paper **fixes** its key knobs: admission probability `p = 90%`, threshold `n = 2`, log size = 5%,
-64 partitions, and it **does not model object lifetimes**. The two extensions target exactly those
-limitations.
-
-### Phase 10 — ⭐ Extension 1: Adaptive Admission & Partitioning (`AdaKanga`)
+### Phase 10 Adaptive Admission & Partitioning (`AdaKanga`)
 **Motivation.** The paper's admission probability, threshold, KLog size, and partition count are
 chosen statically. Real workloads shift (changing hot set, object-size mix, write budget). We add an
 **online controller** that adapts these knobs to minimize miss ratio subject to a **write-rate ceiling**.
@@ -386,7 +379,7 @@ vs. the paper's defaults.
 - On the shift workload: **strictly lower miss ratio than any single fixed config**.
 - Steady-state control noise bounded (no unbounded oscillation); write rate never exceeds the ceiling.
 
-### Phase 11 — ⭐ Extension 2: TTL / Expiry-Aware Kangaroo (`Kangaroo-TTL`)
+### Phase 11 TTL / Expiry-Aware Kangaroo (`Kangaroo-TTL`)
 **Motivation.** Production caches have **per-object TTLs**; log-structured flash cannot delete in
 place, so expiry either leaks flash or forces cleaning. The paper does not model expiry.
 
@@ -495,7 +488,7 @@ Every section, figure, and table of the SOSP '21 paper, and where this plan cove
 | §5.4 Techniques (**Fig. 12 a–d**) | Admission prob, RRIParoo bits, KLog size, threshold; benefit attribution | Phase 7 |
 | §5.5 Production test (**Fig. 13**) | Meta dark launch; ML admission; 18%/38%/42.5% | Phase 9 (documented non-reproducible) |
 | §6 Conclusion | — | — |
-| **Appendix A** (**Table 3**) | Simplified Markov model, Theorem 1 | Phase 8 (optional) |
+| **Appendix A** (**Table 3**) | Simplified Markov model, Theorem 1 | Phase 8 |
 | **Appendix B** (**Table 4**) | Scaling methodology for experiments | Phase 7 |
 | Baselines **SA / LS** | Set-associative (FIFO) / log-structured (full DRAM index) | §1, Phase 1 |
 
