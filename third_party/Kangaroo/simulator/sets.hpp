@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <deque>
 #include <vector>
 #include <unordered_set>
@@ -60,6 +61,10 @@ class Sets : public virtual SetsAbstract {
             std::deque<candidate_t> items;
             int64_t bin_size;
             uint64_t no_hit_insert_loc; // where to put non-hit log items
+            std::vector<uint8_t> bloom_bits;
+            uint64_t bloom_bits_len;
+            int bloom_k;
+            bool bloom_initialized;
         };
         stats::LocalStatsCollector& _set_stats;
         std::vector<Bin> _bins;
@@ -82,6 +87,13 @@ class Sets : public virtual SetsAbstract {
 
         /* reorder objects based on nru status, clears nru bits for set */
         uint64_t _reorder_set_nru(uint64_t bin_num);
+
+        /* rebuild per-set bloom filter from current bin contents */
+        void _rebuildBloom(uint64_t bin_num);
+        bool _bloomAdd(uint64_t bin_num, uint64_t id);
+        bool _bloomContains(uint64_t bin_num, uint64_t id);
+        static uint64_t _hash64(uint64_t x);
+        static uint64_t _hash64_seed(uint64_t x, uint64_t seed);
 
         /* update stats related to flash writes */
         void _updateStatsActualStore(uint64_t num_sets_updated);

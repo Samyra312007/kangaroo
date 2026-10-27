@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <list>
 
 #include "caches/mem_log_sets_cache.hpp"
@@ -138,6 +139,7 @@ std::vector<candidate_t> Sets::insert(std::vector<candidate_t> items) {
         std::vector<candidate_t> local_evict = _insert(item, bin_num);
         evicted.insert(evicted.end(), local_evict.begin(), local_evict.end());
         _updateStatsRequestedStore(item);
+        _rebuildBloom(bin_num);
     }
     uint64_t num_sets_touched = std::count(sets_touched.begin(), sets_touched.end(), true);
     _updateStatsActualStore(num_sets_touched);
@@ -158,6 +160,7 @@ std::vector<candidate_t> Sets::insert(uint64_t set_num, std::vector<candidate_t>
         std::vector<candidate_t> local_evict = _insert(item, set_num);
         evicted.insert(evicted.end(), local_evict.begin(), local_evict.end());
         _updateStatsRequestedStore(item);
+        _rebuildBloom(set_num);
     }
     if (items.size() > 0) {
         _updateStatsActualStore(1);
@@ -178,7 +181,11 @@ void Sets::_updateStatsRequestedStore(candidate_t item) {
 bool Sets::find(candidate_t item) {
     std::unordered_set<uint64_t> possible_bins = findSetNums(item);
     for (uint64_t bin_num: possible_bins) {
+        if (!_bloomContains(bin_num, (uint64_t)item.id)) {
+            continue;
+        }
         uint64_t i = 0;
+        bool hit = false;
         for (candidate_t stored_item: _bins[bin_num].items) {
             if (stored_item == item) {
                 if (_nru) {
@@ -189,14 +196,19 @@ bool Sets::find(candidate_t item) {
                     _set_stats[name]++;
                 }
                 _set_stats["hits"]++;
-                return true;
+                hit = true;
+                break;
             }
             i++;
+        }
+        if (hit) {
+            return true;
         }
         if (_hit_dist) {
             std::string name = "setMisses" + std::to_string(bin_num);
             _set_stats[name]++;
         }
+        _set_stats["bloomFalsePositives"]++;
     }
     _set_stats["misses"]++;
     return false;
@@ -210,6 +222,65 @@ std::unordered_set<uint64_t> Sets::findSetNums(candidate_t item) {
         current_value = std::hash<std::string>{}(std::to_string(std::hash<uint64_t>{}(current_value)));
     }
     return possibilities;
+}
+
+void Sets::_rebuildBloom(uint64_t bin_num) {
+    Bin& bin = _bins[bin_num];
+    uint64_t n = (uint64_t) bin.items.size();
+    double p = 0.10;
+    uint64_t m = 0;
+    if (n > 0) {
+        m = (uint64_t)ceil(-(double)n * log(p) / (pow(log(2.0), 2.0)));
+    }
+    if (m < 1) {
+        m = 1;
+    }
+    bin.bloom_bits.assign((size_t)((m + 7) / 8), 0);
+    bin.bloom_bits_len = m;
+    bin.bloom_k = (int)std::max(1, (int)ceil((double)m / std::max((uint64_t)1, n) * log(2.0)));
+    bin.bloom_initialized = true;
+    for (auto& item: bin.items) {
+        _bloomAdd(bin_num, (uint64_t)item.id);
+    }
+}
+
+bool Sets::_bloomAdd(uint64_t bin_num, uint64_t id) {
+    Bin& bin = _bins[bin_num];
+    for (int i = 0; i < bin.bloom_k; ++i) {
+        uint64_t h = _hash64_seed((bin_num * 1000003ULL) ^ (id * 1000003ULL), (uint64_t)(i + 1));
+        uint64_t bit = h % bin.bloom_bits_len;
+        uint64_t byte_index = bit / 8;
+        uint64_t mask = 1ULL << (bit % 8);
+        bin.bloom_bits[(size_t)byte_index] = (uint8_t)(bin.bloom_bits[(size_t)byte_index] | mask);
+    }
+    return true;
+}
+
+bool Sets::_bloomContains(uint64_t bin_num, uint64_t id) {
+    Bin& bin = _bins[bin_num];
+    for (int i = 0; i < bin.bloom_k; ++i) {
+        uint64_t h = _hash64_seed((bin_num * 1000003ULL) ^ (id * 1000003ULL), (uint64_t)(i + 1));
+        uint64_t bit = h % bin.bloom_bits_len;
+        uint64_t mask = 1ULL << (bit % 8);
+        if ((bin.bloom_bits[(size_t)(bit / 8)] & mask) == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+uint64_t Sets::_hash64(uint64_t x) {
+    uint64_t z = x;
+    z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9ULL;
+    z = (z ^ (z >> 27)) * 0x94d049bb133111ebULL;
+    return z ^ (z >> 31);
+}
+
+uint64_t Sets::_hash64_seed(uint64_t x, uint64_t seed) {
+    uint64_t z = x + 0x9e3779b97f4a7c15ULL + (seed * 0x9e3779b97f4a7c15ULL);
+    z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9ULL;
+    z = (z ^ (z >> 27)) * 0x94d049bb133111ebULL;
+    return z ^ (z >> 31);
 }
 
 double Sets::ratioCapacityUsed() {
@@ -238,13 +309,15 @@ void Sets::flushStats() {
 }
 
 uint64_t Sets::calcMemoryConsumption() {
-    /* TODO: replace 0 w/ bloom filters */
-    uint64_t sets_memory_consumption = 0;
-    if (_nru) {
-        uint64_t bytes_per_set = HIT_BIT_VECTOR_SIZE / 8;
-        sets_memory_consumption = bytes_per_set * _num_sets;
+    uint64_t total_bits = 0;
+    for (uint64_t set_num = 0; set_num < _num_sets; ++set_num) {
+        Bin& bin = _bins[set_num];
+        total_bits += bin.bloom_bits_len;
+        if (_nru) {
+            total_bits += HIT_BIT_VECTOR_SIZE;
+        }
     }
-    return sets_memory_consumption;
+    return total_bits / 8;
 }
 
 bool Sets::trackHit(candidate_t item) {
