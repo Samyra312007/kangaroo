@@ -38,8 +38,13 @@ public:
 
     std::vector<candidate_t> admit_simple(std::vector<candidate_t> items) {
         std::vector<candidate_t> admitted;
-        std::cout << "Threshold admission filter needs sets" << std::endl;
-        assert(false);
+        auto grouped = groupBasic(items);
+        for (auto& bin: grouped) {
+            if (bin.second.size() >= (uint) threshold) {
+                admitted.insert(admitted.end(), bin.second.begin(), bin.second.end());
+            }
+        }
+        trackAdmitted(admitted);
         return admitted;
     }
 
