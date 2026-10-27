@@ -18,6 +18,8 @@ public:
         misc::ConfigReader cfg(settings);
         _admit_ratio = cfg.read<float>("admitRatio");
         _admit_threshold = _admit_ratio * std::numeric_limits<uint64_t>::max();
+        uint64_t _rng_seed = cfg.read<uint64_t>("rngSeed", 0xC0FFEEULL);
+        _rand_gen.seed(_rng_seed);
     }
     
     std::unordered_map<uint64_t, std::vector<candidate_t>> admit(std::vector<candidate_t> items) {
