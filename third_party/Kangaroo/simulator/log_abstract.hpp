@@ -30,6 +30,12 @@ class LogAbstract {
         /* returns ratio of total capacity used */
         virtual double ratioCapacityUsed() = 0;
         
+        /* returns every log object mapping to the given sets-layer set */
+        virtual std::vector<candidate_t> enumerateSet(uint64_t set_num) {
+            (void)set_num;
+            return {};
+        }
+        
         /* ----------- Other Bookeeping --------------- */
 
         virtual double calcWriteAmp() = 0;

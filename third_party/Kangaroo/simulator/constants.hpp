@@ -26,5 +26,12 @@ const int RRIP_LONG_DIFF = 1; // less than distant
 const int RRIP_DISTANT_DIFF = 1;
 const double AVG_OBJ_SIZE_BYTES = 330; // just for memory estimate
 
+/* KLog partitioned hash index constants (Phase 3). */
+const int KLOG_NUM_PARTITIONS = 64;
+const int KLOG_INDEX_TABLE_BITS = 20;
+const uint64_t KLOG_INDEX_TABLE_SIZE = 1ull << KLOG_INDEX_TABLE_BITS;
+const int64_t KLOG_INDEX_ENTRY_META_BYTES = 48; // partitioned index per-object metadata
+const int64_t KLOG_NAIVE_INDEX_META_BYTES = 190; // naive KLog index per-object metadata
+
 }
 

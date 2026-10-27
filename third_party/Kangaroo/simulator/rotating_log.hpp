@@ -40,6 +40,9 @@ class RotatingLog : public virtual LogAbstract {
         /* returns ratio of total capacity used */
         double ratioCapacityUsed();
         
+        /* returns every log object mapping to the given sets-layer set */
+        std::vector<candidate_t> enumerateSet(uint64_t set_num);
+        
         /* ----------- Other Bookeeping --------------- */
 
         double calcWriteAmp();

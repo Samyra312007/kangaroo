@@ -196,6 +196,14 @@ double RotatingLog::ratioCapacityUsed() {
     return _total_size / _total_capacity;
 }
 
+std::vector<candidate_t> RotatingLog::enumerateSet(uint64_t set_num) {
+    auto it = _set_to_items.find(set_num);
+    if (it == _set_to_items.end()) {
+        return {};
+    }
+    return it->second;
+}
+
 double RotatingLog::calcWriteAmp() {
     double ret = _log_stats["bytes_written"]/ (double) _log_stats["stores_requested_bytes"];
     return ret;
