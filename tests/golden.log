@@ -1,0 +1,13 @@
+Parser type: Zipf
+num requests: 1024000
+zipf objCount 100000
+zipf debug objectCount 22 smallest bucket size 2 largest bucket size 14834 effective probability 3.06421e-06 theoretical probability 3.16228e-05
+Stats file at ./output/sa-golden.out
+Setting not found: stats.collectionIntervalPower, using default value: 6
+Setting not found: sets.numHashFunctions, using default value: 1
+Miss Rate: -nan Flash Write Amp: -nan
+go: Generating 1024000 requests
+Miss Rate: 0.093941 Flash Write Amp: 64
+
+Miss Rate: 0.0920469 Flash Write Amp: 64
+Processed 1024000 in 1 seconds, rate of 1.024e+06 accs/sec
