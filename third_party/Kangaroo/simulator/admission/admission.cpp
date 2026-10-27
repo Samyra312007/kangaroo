@@ -4,6 +4,7 @@
 #include "admission/admission.hpp"
 #include "config.hpp"
 #include "admission/random_admission.hpp"
+#include "admission/adaptive.hpp"
 #include "admission/threshold.hpp"
 
 namespace admission {
@@ -21,8 +22,10 @@ Policy* Policy::create(const libconfig::Setting& settings, flashCache::SetsAbstr
 
     std::cout << "Admission policy: " << policyType << std::endl;
     
-    if (policyType == "Random") { 
+    if (policyType == "Random") {
         return new RandomAdmission(settings, sets, log, admission_stats);
+    } else if (policyType == "Adaptive") {
+        return new AdaptiveAdmission(settings, sets, log, admission_stats);
     } else if (policyType == "Threshold") {
         return new Threshold(settings, sets, log, admission_stats);
     } else {
