@@ -143,7 +143,8 @@ bash tests/run_golden.sh   # golden-trace regression (exact match)
 | 1 | SA / LS baselines | Done |
 | 2 | Test harness + deterministic workloads | Done |
 | 3 | KLog (partitioned index + circular log) | Done |
-| 4-6 | KSet, admission, RRIParoo | Vendored simulator provides reference; verification pending |
+| 4 | KSet (set-associative + Bloom filter) | Done |
+| 5-6 | Admission, RRIParoo | Vendored simulator provides reference; verification pending |
 | 7 | Paper figure reproduction | Planned |
 | 8 | Correctness + sanitizers + docs | Planned |
 | 9 | On-flash CacheLib track | Optional (needs HW) |
