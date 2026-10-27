@@ -11,9 +11,10 @@ struct candidate_t {
   int64_t obj_size;
   mutable int hit_count;
   int64_t oracle_count;
+  int64_t expire_time;
 
   static candidate_t make(const parser::Request& req) { 
-    return candidate_t{.id=req.id, .obj_size=req.size(), .hit_count=0, .oracle_count=req.oracle_count};
+    return candidate_t{.id=req.id, .obj_size=req.size(), .hit_count=0, .oracle_count=req.oracle_count, .expire_time=req.expire_time};
   }
 
   inline bool operator==(const candidate_t& that) const { 

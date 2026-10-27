@@ -15,6 +15,7 @@ struct Request {
   uint64_t time;
   int32_t type;
   int64_t oracle_count;
+  int64_t expire_time; // 0 = never expires (Phase 11 TTL)
 
   inline int64_t size() const { return req_size; }
 } __attribute__((packed));

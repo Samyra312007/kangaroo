@@ -65,6 +65,10 @@ void Cache::access(const parser::Request& req) {
 
     auto id = candidate_t::make(req);
     bool hit = this->find(id);
+    // Phase 11 TTL: an expired object never counts as a hit.
+    if (hit && id.expire_time != 0 && (int64_t)req.time >= id.expire_time) {
+        hit = false;
+    }
     
     if (hit) {
         globalStats["hits"]++;
