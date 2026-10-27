@@ -27,6 +27,8 @@ RripSets::RripSets(uint64_t num_sets, uint64_t set_capacity,
     _set_stats["setCapacity"] = _set_capacity;
     _set_stats["numHashFunctions"] = _num_hash_functions;
     _set_stats["rripBits"] = bits;
+    _set_stats["rripPromotions"] = 0;
+    _set_stats["rripEvictions"] = 0;
 }
 
 void RripSets::_incrementRrpvValues(uint64_t bin_num) {
@@ -96,6 +98,7 @@ std::vector<candidate_t> RripSets::_insert(candidate_t item, uint64_t bin_num) {
         candidate_t old = bin.rrpv_to_items.begin()->second.front();
         _set_stats["numEvictions"]++;
         _set_stats["sizeEvictions"] += old.obj_size;
+        _set_stats["rripEvictions"]++;
         bin.bin_size -= old.obj_size;
         _total_size -= old.obj_size;
         evicted.push_back(old);
@@ -165,6 +168,7 @@ bool RripSets::find(candidate_t item) {
             for (auto vec_it = it->second.begin(); vec_it != it->second.end(); vec_it++) {
                 if (*vec_it == item) {
                     if (it->first != 0) {
+                        _set_stats["rripPromotions"]++;
                         if (_mixed || _promotion_only) {
                             _bins[bin_num].rrpv_to_items[0].push_back(*vec_it);
                         } else {
@@ -227,6 +231,8 @@ void RripSets::flushStats() {
     _set_stats["hitsSharedWithLog"] = 0;
     _set_stats["trackHitsFailed"] = 0;
     _set_stats["numHitItemsEvicted"] = 0;
+    _set_stats["rripPromotions"] = 0;
+    _set_stats["rripEvictions"] = 0;
 }
 
 uint64_t RripSets::calcMemoryConsumption() {
