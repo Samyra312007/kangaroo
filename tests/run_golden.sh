@@ -13,8 +13,12 @@ OUT2="$(mktemp)"
 "$BIN" "$CFG" >"$OUT2" 2>&1
 GOT="$(grep 'Miss Rate:' "$OUT1" | tail -1)"
 WANT="$(cat "$EXP")"
-if ! cmp -s "$OUT1" "$OUT2"; then
+# ignore timing lines when comparing full outputs (wall-clock is not deterministic)
+NORM="$(grep -v '^Processed ' "$OUT1" | grep -v 'seconds, rate of' )"
+NORM2="$(grep -v '^Processed ' "$OUT2" | grep -v 'seconds, rate of' )"
+if [ "$NORM" != "$NORM2" ]; then
   echo "DETERMINISM FAIL: two identical runs produced different output"
+  diff "$OUT1" "$OUT2" | head -20
   rm -f "$OUT1" "$OUT2"
   exit 1
 fi
