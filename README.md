@@ -44,7 +44,7 @@ and is evaluated in later phases.
   `sets`), LS (`memoryCache` + `log`), and Kangaroo (`memoryCache` + `log` +
   `sets`).
 - **Scripted evaluation pipeline**: generate configs, run in parallel, collect
-  into CSV.
+  into CSV, render paper-style figures.
 - **Golden-trace regression test** for bit-for-bit reproducibility.
 - **Two extensions beyond the paper**: *AdaKanga* (online adaptive admission)
   and *Kangaroo-TTL* (expiry-aware caching).
@@ -66,11 +66,15 @@ admission -> KLog -> (on eviction) threshold admission -> KSet.
 
 ```
 plan.md                     phase-wise implementation plan
+report.md                   Phase 7 reproduction report (paper vs. measured)
 assets/logo.svg             project logo
 configs/baselines/          generated SA / LS simulator configurations (Phase 1)
 configs/golden/             golden regression config
+configs/sweeps/             Phase 7 sweep configurations + manifest
 results/baselines/          baseline logs + collected CSV (Phase 1)
 results/golden/             golden expected output
+results/sweeps/             Phase 7 CSVs (Figs. 7-12 data, Tables 1 & 4)
+figures/                    Phase 7 PDF figures (paper Figs. 7-12 analogues)
 scripts/
   setup-deps.sh             build SCons + libconfig++ into .deps/ (no root)
   build.sh                  build third_party/Kangaroo/simulator/bin/cache
@@ -78,12 +82,18 @@ scripts/
   run-baselines.sh          run all baseline configs, capture stdout
   run-all.sh                one-command full reproduction
   collect.py                parse logs -> results/baselines/baseline_results.csv
+  gen-sweep-configs.py      generate Phase 7 sweep configs + manifest
+  run-sweeps.sh             parallel sweep runner (resumable)
+  collect-sweeps.py         logs + stats JSON -> per-figure CSVs
+  scale.py                  Appendix B trace-scaling calculator (Table 4)
+  setup-plot-deps.sh        create .venv with matplotlib/numpy
+  make-figures.sh           render figures/*.pdf from the CSVs
 tests/
   run_golden.sh             golden-trace regression test
   golden.expected           committed expected steady-state line
 third_party/Kangaroo/       vendored upstream simulator (with build fixes)
 docs/
-  phase1.md                 Phase 0/1 notes, build fixes, results
+  phase1.md                Phase 0/1 notes, build fixes, results
   report.tex                research-style status report
 ```
 
@@ -107,6 +117,18 @@ Or, in one command:
 scripts/run-all.sh 8
 ```
 
+### Phase 7 sweep (paper reproduction)
+
+```bash
+python3 scripts/gen-sweep-configs.py    # 46 configs -> configs/sweeps/
+bash scripts/run-sweeps.sh 12           # resumable; FORCE=1 to re-run all
+python3 scripts/collect-sweeps.py       # -> results/sweeps/*.csv
+bash scripts/make-figures.sh            # -> figures/*.pdf
+```
+
+Analysis of every figure against the paper's reported numbers lives in
+[`report.md`](report.md).
+
 ## Usage
 
 ```bash
@@ -129,6 +151,21 @@ requests), steady state, 20 MB flash:
 
 Full table: `results/baselines/baseline_results.csv`.
 
+**Phase 7 — Kangaroo vs. baselines** (Zipf, alpha 0.9, 1 M objects, 10.24 M
+requests, 5 MB DRAM / 20 MB flash):
+
+| Design | Miss ratio | Flash WAF | Device write (MB/s) |
+|---|---|---|---|
+| SA | 0.2087 | 64.0 | 430.2 |
+| Kangaroo | 0.1860 | 14.5 | 86.1 |
+| LS | 0.2124 | 1.0 | 6.9 |
+
+Kangaroo Pareto-dominates SA (fewer misses *and* fewer writes) and delivers
+12.4% fewer misses than LS at a higher write rate — reproducing the paper's
+Fig. 8 story. Sensitivity sweeps (DRAM, flash, object size, admission
+probability, RRIParoo bits, KLog size, admission threshold) are in
+`results/sweeps/` and `figures/`; see [`report.md`](report.md).
+
 ## Testing
 
 ```bash
@@ -146,7 +183,7 @@ bash tests/run_golden.sh   # golden-trace regression (exact match)
 | 4 | KSet (set-associative + Bloom filter) | Done |
 | 5 | Admission policies | Done |
 | 6 | RRIParoo | Done |
-| 7 | Paper figure reproduction | Planned |
+| 7 | Paper figure reproduction | Done |
 | 8 | Correctness + sanitizers + docs | Planned |
 | 9 | On-flash CacheLib track | Optional (needs HW) |
 | 10 | AdaKanga (adaptive admission) | Scaffolded |
