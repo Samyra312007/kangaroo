@@ -29,4 +29,10 @@ env.Append(CPPPATH = cppPath)
 if libPath:
     env.Append(LINKFLAGS = ['-Wl,-rpath=%s' % p for p in libPath])
 
-env.SConscript('SConscript', {'env': env}, variant_dir='bin', duplicate=0)
+# Sanitizer build: ASAN_BUILD=1 builds a separate bin/asan/cache binary.
+variant_dir = os.environ.get('ASAN_BIN_DIR', 'bin')
+if os.environ.get('ASAN_BUILD') == '1':
+    env.Append(CXXFLAGS = ['-fsanitize=address,undefined', '-fno-omit-frame-pointer'])
+    env.Append(LINKFLAGS = ['-fsanitize=address,undefined'])
+
+env.SConscript('SConscript', {'env': env}, variant_dir=variant_dir, duplicate=0)
