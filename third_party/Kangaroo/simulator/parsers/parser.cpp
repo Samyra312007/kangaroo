@@ -20,7 +20,8 @@ parser::Parser* parser::Parser::create(const libconfig::Setting& settings) {
         assert(numRequests > 0);
         auto alpha = cfg.read<float>("trace.alpha");
         auto numObjects = cfg.read<int>("trace.numObjects");
-        return new ZipfParser(alpha, numObjects, numRequests);
+        double scaling = cfg.read<double>("trace.objectScaling", 1.0);
+        return new ZipfParser(alpha, numObjects, numRequests, scaling);
     } else if (parserType == "FacebookTaoSimple") {
         std::string filename1 = cfg.read<const char *>("trace.filename");
         double sampling = cfg.read<double>("trace.samplingPercent", 1);

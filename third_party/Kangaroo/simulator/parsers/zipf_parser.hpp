@@ -19,8 +19,10 @@ namespace parser {
 class ZipfParser : public virtual Parser {
 
 public:
-  ZipfParser(float alpha, uint64_t numObjects, uint64_t _numRequests)
-    : zipf("", numObjects, alpha, 1), numRequests(_numRequests) {
+  ZipfParser(float alpha, uint64_t numObjects, uint64_t _numRequests,
+             double objectScaling = 1.0)
+    : zipf("", numObjects, alpha, 1), numRequests(_numRequests),
+      _objectScaling(objectScaling) {
   }
 
   void go(VisitorFn visit) {
@@ -33,7 +35,11 @@ public:
     for (uint64_t i = 0; i < numRequests; i++){
       zipf.Sample(obj_id, obj_size);
       req.id = obj_id;
-      req.req_size = obj_size;
+      /* Appendix B scaling: emulate larger/smaller objects while the
+       * generator's object count (and therefore the Zipf shape) is
+       * chosen by the config. */
+      req.req_size = (int64_t)(obj_size * _objectScaling);
+      if (req.req_size < 1) { req.req_size = 1; }
       req.req_num = i;
       visit(req);
     }
@@ -42,6 +48,7 @@ public:
 private:
   ZipfRequests zipf;
   uint64_t numRequests;
+  double _objectScaling;
 };
 
 } // namespace parser
