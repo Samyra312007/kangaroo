@@ -15,7 +15,7 @@ public:
             Policy(admission_stats, sets, log) {
         misc::ConfigReader cfg(settings);
         threshold = cfg.read<int>("threshold");
-        assert(threshold > 1);
+        assert(threshold >= 1);
         _admission_stats["thresholdValue"] = threshold;
     }
     
