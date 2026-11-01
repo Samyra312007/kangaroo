@@ -1,0 +1,8 @@
+mode,scale_factor,avg_obj_bytes,num_objects,working_set_mb,request_rate_rps,flash_mb,dram_mb,mem_overhead_ratio,notes
+object_size,0.5,32,2000000,61.04,,20,5,0.040000,"constant working set; numObjects /= S, sizes *= S"
+object_size,1,64,1000000,61.04,,20,5,0.020000,"constant working set; numObjects /= S, sizes *= S"
+object_size,2,128,500000,61.04,,20,5,0.010000,"constant working set; numObjects /= S, sizes *= S"
+object_size,4,256,250000,61.04,,20,5,0.005000,"constant working set; numObjects /= S, sizes *= S"
+request_sample,1,64,1000000,61.04,95.7,20,5,0.020000,"1/f request sample; rate *= 1/f, duration preserved"
+request_sample,100,64,1000000,61.04,1.0,20,5,0.020000,"1/f request sample; rate *= 1/f, duration preserved"
+request_sample,600,64,1000000,61.04,0.2,20,5,0.020000,"1/f request sample; rate *= 1/f, duration preserved"
