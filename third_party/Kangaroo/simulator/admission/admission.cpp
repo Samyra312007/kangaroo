@@ -5,6 +5,7 @@
 #include "config.hpp"
 #include "admission/random_admission.hpp"
 #include "admission/adaptive.hpp"
+#include "admission/ml_admission.hpp"
 #include "admission/threshold.hpp"
 
 namespace admission {
@@ -28,6 +29,8 @@ Policy* Policy::create(const libconfig::Setting& settings, flashCache::SetsAbstr
         return new AdaptiveAdmission(settings, sets, log, admission_stats);
     } else if (policyType == "Threshold") {
         return new Threshold(settings, sets, log, admission_stats);
+    } else if (policyType == "ML") {
+        return new MLAdmission(settings, sets, log, admission_stats);
     } else {
         std::cerr << "Unknown admission policy: " << policyType << std::endl;
         assert(false);
