@@ -16,4 +16,5 @@ __pycache__/
 results/sweeps/logs/
 results/sweeps/json/
 results/baselines/logs/
+results/phase9/logs/
 figures/*.png

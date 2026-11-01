@@ -18,4 +18,7 @@ fi
 bash scripts/run-baselines.sh "${1:-4}"
 python3 scripts/collect.py
 python3 scripts/markov-threshold.py >/dev/null
-echo "run-all: DONE -> results/baselines/baseline_results.csv, results/theory/markov_threshold.csv"
+if [ "${RUN_PHASE9:-1}" = "1" ]; then
+  bash scripts/phase9-simulation.sh >/dev/null
+fi
+echo "run-all: DONE -> results/baselines/baseline_results.csv, results/theory/markov_threshold.csv, results/phase9/section55.csv"
