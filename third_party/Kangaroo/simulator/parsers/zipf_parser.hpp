@@ -21,7 +21,7 @@ class ZipfParser : public virtual Parser {
 public:
   ZipfParser(float alpha, uint64_t numObjects, uint64_t _numRequests,
              double objectScaling = 1.0)
-    : zipf("", numObjects, alpha, 1), numRequests(_numRequests),
+    : zipf("", numObjects, alpha, 1), _alpha(alpha), numRequests(_numRequests),
       _objectScaling(objectScaling) {
   }
 
@@ -41,12 +41,15 @@ public:
       req.req_size = (int64_t)(obj_size * _objectScaling);
       if (req.req_size < 1) { req.req_size = 1; }
       req.req_num = i;
+      req.oracle_count = static_cast<int64_t>(
+          zipf.expectedFutureCount(obj_id, numRequests - i));
       visit(req);
     }
   }
 
 private:
   ZipfRequests zipf;
+  double _alpha;
   uint64_t numRequests;
   double _objectScaling;
 };

@@ -30,6 +30,10 @@ private:
 
     std::unordered_map<int64_t, IdSizePair> stats;
 
+    double _alpha = 0.0;
+    double _sumWeights = 0.0;
+    uint64_t _objectCount = 0;
+
 public:
     ZipfRequests(std::string sizeFile, uint64_t objCount, double zipfAlpha, uint64_t min_size) {
         objCount *= 1000;
@@ -37,6 +41,8 @@ public:
 
         // init
         rd_gen.seed(1);
+        _alpha = zipfAlpha;
+        _objectCount = objCount;
 
         // try to scan object sizes from file
         std::vector<int64_t> base_sizes;
@@ -66,7 +72,9 @@ public:
         uint64_t vec_size = min_size;
         popDist[popBucket].reserve(vec_size);
         for(; objectId < objCount; objectId++) {
-            ratesum += 1.0/pow(double(objectId), zipfAlpha);
+            const double zipfWeight = 1.0 / pow(double(objectId), zipfAlpha);
+            ratesum += zipfWeight;
+            _sumWeights += zipfWeight;
             popDist[popBucket].push_back(
                                          IdSizePair(
                                                     objectId,
@@ -110,6 +118,23 @@ public:
             stats[id].first = size;
             stats[id].second = 1;
         }
+    }
+
+    /* Expected remaining future requests for an object id under the IRM.
+       This is the feature used by the Phase 9 ML-style pre-flash admission
+       policy when a real CacheLab trace is not available. */
+    double expectedFutureCount(uint64_t id, uint64_t remainingRequests) const {
+        if (_objectCount == 0 || _sumWeights <= 0.0 || remainingRequests == 0) {
+            return 0.0;
+        }
+        if (id < 1) {
+            id = 1;
+        }
+        if (id > _objectCount) {
+            id = _objectCount;
+        }
+        const double p = (1.0 / pow(double(id), _alpha)) / _sumWeights;
+        return std::max(0.0, p * double(remainingRequests));
     }
 
     void Summarize() {
