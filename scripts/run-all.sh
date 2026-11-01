@@ -10,6 +10,12 @@ if [ ! -d configs/baselines ] || [ -z "$(ls configs/baselines 2>/dev/null)" ]; t
   mkdir -p configs/baselines
   # configs are committed; nothing to generate beyond what's in tree
 fi
+bash tests/run_golden.sh >/dev/null
+bash tests/run_edge_cases.sh >/dev/null
+if [ "${SANITIZE:-0}" = "1" ]; then
+  bash tests/run_sanitizer.sh >/dev/null
+fi
 bash scripts/run-baselines.sh "${1:-4}"
 python3 scripts/collect.py
-echo "run-all: DONE -> results/baselines/baseline_results.csv"
+python3 scripts/markov-threshold.py >/dev/null
+echo "run-all: DONE -> results/baselines/baseline_results.csv, results/theory/markov_threshold.csv"
