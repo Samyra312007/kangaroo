@@ -64,6 +64,18 @@ void Cache::access(const parser::Request& req) {
     globalStats["timestamp"] = req.time;
 
     auto id = candidate_t::make(req);
+    /* A zero-byte object has no payload to cache, so every access is a miss
+       and it never consumes DRAM or flash capacity. */
+    if (id.obj_size == 0) {
+        globalStats["misses"]++;
+        trackAccesses();
+        trackHistory(id);
+        if ((_stats_interval > 0) && ((getTotalAccesses() % _stats_interval) == 0)) {
+            dumpStats();
+        }
+        return;
+    }
+
     bool hit = this->find(id);
     // Phase 11 TTL: an expired object never counts as a hit.
     if (hit && id.expire_time != 0 && (int64_t)req.time >= id.expire_time) {
@@ -121,7 +133,11 @@ void Cache::trackHistory(candidate_t id) {
 }
 
 double Cache::calcMissRate() {
-    return globalStats["misses"] / (double) getAccessesAfterFlush();
+    uint64_t total = getAccessesAfterFlush();
+    if (total == 0) {
+        return 0.0;
+    }
+    return globalStats["misses"] / (double) total;
 }
 
 void Cache::flushStats() {
