@@ -1,0 +1,1434 @@
+{
+  "generated_by": "scripts/gen-sweep-configs.py",
+  "base": {
+    "base_obj_bytes": 64,
+    "base_num_objects": 1000000,
+    "total_requests": 10240000,
+    "full_server_request_rate": 95.7
+  },
+  "configs": {
+    "kangaroo-fifo": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-fifo.cfg"
+    },
+    "kangaroo-log01": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 1.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-log01.cfg"
+    },
+    "kangaroo-log03": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 3.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-log03.cfg"
+    },
+    "kangaroo-log07": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 7.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-log07.cfg"
+    },
+    "kangaroo-log09": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 9.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-log09.cfg"
+    },
+    "kangaroo-m1-f20": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 1,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-m1-f20.cfg"
+    },
+    "kangaroo-m10-f20": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 10,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-m10-f20.cfg"
+    },
+    "kangaroo-m2-f20": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 2,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-m2-f20.cfg"
+    },
+    "kangaroo-m3-f20": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 3,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-m3-f20.cfg"
+    },
+    "kangaroo-m5-f10": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 10,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-m5-f10.cfg"
+    },
+    "kangaroo-m5-f20": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": 4
+      },
+      "file": "configs/sweeps/kangaroo-m5-f20.cfg"
+    },
+    "kangaroo-m5-f50": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 50,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-m5-f50.cfg"
+    },
+    "kangaroo-objx05-m5-f20": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 2000,
+        "total_k_accesses": 10000,
+        "object_scaling": 0.5,
+        "mem_overhead_ratio": 0.04,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-objx05-m5-f20.cfg"
+    },
+    "kangaroo-objx2-m5-f20": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 500,
+        "total_k_accesses": 10000,
+        "object_scaling": 2.0,
+        "mem_overhead_ratio": 0.01,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-objx2-m5-f20.cfg"
+    },
+    "kangaroo-objx4-m5-f20": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 250,
+        "total_k_accesses": 10000,
+        "object_scaling": 4.0,
+        "mem_overhead_ratio": 0.005,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-objx4-m5-f20.cfg"
+    },
+    "kangaroo-p010": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.1,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-p010.cfg"
+    },
+    "kangaroo-p030": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.3,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-p030.cfg"
+    },
+    "kangaroo-p050": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.5,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-p050.cfg"
+    },
+    "kangaroo-p070": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.7,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-p070.cfg"
+    },
+    "kangaroo-p100": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 1.0,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-p100.cfg"
+    },
+    "kangaroo-rrip1": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 1,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-rrip1.cfg"
+    },
+    "kangaroo-rrip2": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 2,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-rrip2.cfg"
+    },
+    "kangaroo-rrip4": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 4,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-rrip4.cfg"
+    },
+    "kangaroo-thr03": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 3,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-thr03.cfg"
+    },
+    "kangaroo-thr04": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 4,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-thr04.cfg"
+    },
+    "kangaroo-thr08": {
+      "design": "KANGAROO",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": 3,
+        "admit_ratio": 0.9,
+        "threshold": 8,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/kangaroo-thr08.cfg"
+    },
+    "ls-m1-f20": {
+      "design": "LS",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 1,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/ls-m1-f20.cfg"
+    },
+    "ls-m10-f20": {
+      "design": "LS",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 10,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/ls-m10-f20.cfg"
+    },
+    "ls-m2-f20": {
+      "design": "LS",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 2,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/ls-m2-f20.cfg"
+    },
+    "ls-m3-f20": {
+      "design": "LS",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 3,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/ls-m3-f20.cfg"
+    },
+    "ls-m5-f10": {
+      "design": "LS",
+      "params": {
+        "flash_mb": 10,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/ls-m5-f10.cfg"
+    },
+    "ls-m5-f20": {
+      "design": "LS",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": 4
+      },
+      "file": "configs/sweeps/ls-m5-f20.cfg"
+    },
+    "ls-m5-f50": {
+      "design": "LS",
+      "params": {
+        "flash_mb": 50,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/ls-m5-f50.cfg"
+    },
+    "ls-objx05-m5-f20": {
+      "design": "LS",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 2000,
+        "total_k_accesses": 10000,
+        "object_scaling": 0.5,
+        "mem_overhead_ratio": 0.04,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/ls-objx05-m5-f20.cfg"
+    },
+    "ls-objx2-m5-f20": {
+      "design": "LS",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 500,
+        "total_k_accesses": 10000,
+        "object_scaling": 2.0,
+        "mem_overhead_ratio": 0.01,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/ls-objx2-m5-f20.cfg"
+    },
+    "ls-objx4-m5-f20": {
+      "design": "LS",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 250,
+        "total_k_accesses": 10000,
+        "object_scaling": 4.0,
+        "mem_overhead_ratio": 0.005,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/ls-objx4-m5-f20.cfg"
+    },
+    "sa-m1-f20": {
+      "design": "SA",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 1,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/sa-m1-f20.cfg"
+    },
+    "sa-m10-f20": {
+      "design": "SA",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 10,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/sa-m10-f20.cfg"
+    },
+    "sa-m2-f20": {
+      "design": "SA",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 2,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/sa-m2-f20.cfg"
+    },
+    "sa-m3-f20": {
+      "design": "SA",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 3,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/sa-m3-f20.cfg"
+    },
+    "sa-m5-f10": {
+      "design": "SA",
+      "params": {
+        "flash_mb": 10,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/sa-m5-f10.cfg"
+    },
+    "sa-m5-f20": {
+      "design": "SA",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": 4
+      },
+      "file": "configs/sweeps/sa-m5-f20.cfg"
+    },
+    "sa-m5-f50": {
+      "design": "SA",
+      "params": {
+        "flash_mb": 50,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 1000,
+        "total_k_accesses": 10000,
+        "object_scaling": 1.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/sa-m5-f50.cfg"
+    },
+    "sa-objx05-m5-f20": {
+      "design": "SA",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 2000,
+        "total_k_accesses": 10000,
+        "object_scaling": 0.5,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/sa-objx05-m5-f20.cfg"
+    },
+    "sa-objx2-m5-f20": {
+      "design": "SA",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 500,
+        "total_k_accesses": 10000,
+        "object_scaling": 2.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/sa-objx2-m5-f20.cfg"
+    },
+    "sa-objx4-m5-f20": {
+      "design": "SA",
+      "params": {
+        "flash_mb": 20,
+        "mem_mb": 5,
+        "set_capacity": 4096,
+        "percent_log": 5.0,
+        "rrip_bits": null,
+        "admit_ratio": 0.9,
+        "threshold": 2,
+        "readmit": 1,
+        "flush_block_kb": 256,
+        "alpha": 0.9,
+        "num_objects_k": 250,
+        "total_k_accesses": 10000,
+        "object_scaling": 4.0,
+        "mem_overhead_ratio": null,
+        "interval_power": null
+      },
+      "file": "configs/sweeps/sa-objx4-m5-f20.cfg"
+    }
+  },
+  "sweeps": {
+    "fig07": [
+      {
+        "design": "SA",
+        "config": "sa-m5-f20"
+      },
+      {
+        "design": "LS",
+        "config": "ls-m5-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "config": "kangaroo-m5-f20"
+      }
+    ],
+    "fig08": [
+      {
+        "design": "SA",
+        "mem_mb": 1,
+        "flash_mb": 20,
+        "config": "sa-m1-f20"
+      },
+      {
+        "design": "SA",
+        "mem_mb": 2,
+        "flash_mb": 20,
+        "config": "sa-m2-f20"
+      },
+      {
+        "design": "SA",
+        "mem_mb": 3,
+        "flash_mb": 20,
+        "config": "sa-m3-f20"
+      },
+      {
+        "design": "SA",
+        "mem_mb": 5,
+        "flash_mb": 20,
+        "config": "sa-m5-f20"
+      },
+      {
+        "design": "SA",
+        "mem_mb": 10,
+        "flash_mb": 20,
+        "config": "sa-m10-f20"
+      },
+      {
+        "design": "SA",
+        "mem_mb": 5,
+        "flash_mb": 10,
+        "config": "sa-m5-f10"
+      },
+      {
+        "design": "SA",
+        "mem_mb": 5,
+        "flash_mb": 50,
+        "config": "sa-m5-f50"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 1,
+        "flash_mb": 20,
+        "config": "ls-m1-f20"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 2,
+        "flash_mb": 20,
+        "config": "ls-m2-f20"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 3,
+        "flash_mb": 20,
+        "config": "ls-m3-f20"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 5,
+        "flash_mb": 20,
+        "config": "ls-m5-f20"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 10,
+        "flash_mb": 20,
+        "config": "ls-m10-f20"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 5,
+        "flash_mb": 10,
+        "config": "ls-m5-f10"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 5,
+        "flash_mb": 50,
+        "config": "ls-m5-f50"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 1,
+        "flash_mb": 20,
+        "config": "kangaroo-m1-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 2,
+        "flash_mb": 20,
+        "config": "kangaroo-m2-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 3,
+        "flash_mb": 20,
+        "config": "kangaroo-m3-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 5,
+        "flash_mb": 20,
+        "config": "kangaroo-m5-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 10,
+        "flash_mb": 20,
+        "config": "kangaroo-m10-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 5,
+        "flash_mb": 10,
+        "config": "kangaroo-m5-f10"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 5,
+        "flash_mb": 50,
+        "config": "kangaroo-m5-f50"
+      }
+    ],
+    "fig09": [
+      {
+        "design": "SA",
+        "mem_mb": 1,
+        "config": "sa-m1-f20"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 1,
+        "config": "ls-m1-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 1,
+        "config": "kangaroo-m1-f20"
+      },
+      {
+        "design": "SA",
+        "mem_mb": 2,
+        "config": "sa-m2-f20"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 2,
+        "config": "ls-m2-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 2,
+        "config": "kangaroo-m2-f20"
+      },
+      {
+        "design": "SA",
+        "mem_mb": 3,
+        "config": "sa-m3-f20"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 3,
+        "config": "ls-m3-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 3,
+        "config": "kangaroo-m3-f20"
+      },
+      {
+        "design": "SA",
+        "mem_mb": 5,
+        "config": "sa-m5-f20"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 5,
+        "config": "ls-m5-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 5,
+        "config": "kangaroo-m5-f20"
+      },
+      {
+        "design": "SA",
+        "mem_mb": 10,
+        "config": "sa-m10-f20"
+      },
+      {
+        "design": "LS",
+        "mem_mb": 10,
+        "config": "ls-m10-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "mem_mb": 10,
+        "config": "kangaroo-m10-f20"
+      }
+    ],
+    "fig10": [
+      {
+        "design": "SA",
+        "flash_mb": 10,
+        "config": "sa-m5-f10"
+      },
+      {
+        "design": "LS",
+        "flash_mb": 10,
+        "config": "ls-m5-f10"
+      },
+      {
+        "design": "KANGAROO",
+        "flash_mb": 10,
+        "config": "kangaroo-m5-f10"
+      },
+      {
+        "design": "SA",
+        "flash_mb": 20,
+        "config": "sa-m5-f20"
+      },
+      {
+        "design": "LS",
+        "flash_mb": 20,
+        "config": "ls-m5-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "flash_mb": 20,
+        "config": "kangaroo-m5-f20"
+      },
+      {
+        "design": "SA",
+        "flash_mb": 50,
+        "config": "sa-m5-f50"
+      },
+      {
+        "design": "LS",
+        "flash_mb": 50,
+        "config": "ls-m5-f50"
+      },
+      {
+        "design": "KANGAROO",
+        "flash_mb": 50,
+        "config": "kangaroo-m5-f50"
+      }
+    ],
+    "fig11": [
+      {
+        "design": "SA",
+        "scale": 0.5,
+        "object_bytes": 32.0,
+        "num_objects": 2000000,
+        "config": "sa-objx05-m5-f20"
+      },
+      {
+        "design": "LS",
+        "scale": 0.5,
+        "object_bytes": 32.0,
+        "num_objects": 2000000,
+        "config": "ls-objx05-m5-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "scale": 0.5,
+        "object_bytes": 32.0,
+        "num_objects": 2000000,
+        "config": "kangaroo-objx05-m5-f20"
+      },
+      {
+        "design": "SA",
+        "scale": 1.0,
+        "object_bytes": 64.0,
+        "num_objects": 1000000,
+        "config": "sa-m5-f20"
+      },
+      {
+        "design": "LS",
+        "scale": 1.0,
+        "object_bytes": 64.0,
+        "num_objects": 1000000,
+        "config": "ls-m5-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "scale": 1.0,
+        "object_bytes": 64.0,
+        "num_objects": 1000000,
+        "config": "kangaroo-m5-f20"
+      },
+      {
+        "design": "SA",
+        "scale": 2.0,
+        "object_bytes": 128.0,
+        "num_objects": 500000,
+        "config": "sa-objx2-m5-f20"
+      },
+      {
+        "design": "LS",
+        "scale": 2.0,
+        "object_bytes": 128.0,
+        "num_objects": 500000,
+        "config": "ls-objx2-m5-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "scale": 2.0,
+        "object_bytes": 128.0,
+        "num_objects": 500000,
+        "config": "kangaroo-objx2-m5-f20"
+      },
+      {
+        "design": "SA",
+        "scale": 4.0,
+        "object_bytes": 256.0,
+        "num_objects": 250000,
+        "config": "sa-objx4-m5-f20"
+      },
+      {
+        "design": "LS",
+        "scale": 4.0,
+        "object_bytes": 256.0,
+        "num_objects": 250000,
+        "config": "ls-objx4-m5-f20"
+      },
+      {
+        "design": "KANGAROO",
+        "scale": 4.0,
+        "object_bytes": 256.0,
+        "num_objects": 250000,
+        "config": "kangaroo-objx4-m5-f20"
+      }
+    ],
+    "fig12a": [
+      {
+        "admit_ratio": 0.1,
+        "config": "kangaroo-p010"
+      },
+      {
+        "admit_ratio": 0.3,
+        "config": "kangaroo-p030"
+      },
+      {
+        "admit_ratio": 0.5,
+        "config": "kangaroo-p050"
+      },
+      {
+        "admit_ratio": 0.7,
+        "config": "kangaroo-p070"
+      },
+      {
+        "admit_ratio": 0.9,
+        "config": "kangaroo-m5-f20"
+      },
+      {
+        "admit_ratio": 1.0,
+        "config": "kangaroo-p100"
+      }
+    ],
+    "fig12b": [
+      {
+        "variant": "FIFO",
+        "bits": 0,
+        "config": "kangaroo-fifo"
+      },
+      {
+        "variant": "RRIP-1b",
+        "bits": 1,
+        "config": "kangaroo-rrip1"
+      },
+      {
+        "variant": "RRIP-2b",
+        "bits": 2,
+        "config": "kangaroo-rrip2"
+      },
+      {
+        "variant": "RRIP-3b",
+        "bits": 3,
+        "config": "kangaroo-m5-f20"
+      },
+      {
+        "variant": "RRIP-4b",
+        "bits": 4,
+        "config": "kangaroo-rrip4"
+      }
+    ],
+    "fig12c": [
+      {
+        "percent_log": 0.0,
+        "design": "SA",
+        "config": "sa-m5-f20"
+      },
+      {
+        "percent_log": 1.0,
+        "design": "KANGAROO",
+        "config": "kangaroo-log01"
+      },
+      {
+        "percent_log": 3.0,
+        "design": "KANGAROO",
+        "config": "kangaroo-log03"
+      },
+      {
+        "percent_log": 5.0,
+        "design": "KANGAROO",
+        "config": "kangaroo-m5-f20"
+      },
+      {
+        "percent_log": 7.0,
+        "design": "KANGAROO",
+        "config": "kangaroo-log07"
+      },
+      {
+        "percent_log": 9.0,
+        "design": "KANGAROO",
+        "config": "kangaroo-log09"
+      }
+    ],
+    "fig12d": [
+      {
+        "threshold": 2,
+        "config": "kangaroo-m5-f20"
+      },
+      {
+        "threshold": 3,
+        "config": "kangaroo-thr03"
+      },
+      {
+        "threshold": 4,
+        "config": "kangaroo-thr04"
+      },
+      {
+        "threshold": 8,
+        "config": "kangaroo-thr08"
+      }
+    ]
+  }
+}

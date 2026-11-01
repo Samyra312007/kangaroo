@@ -10,3 +10,9 @@ third_party/Kangaroo/run-scripts/configs/
 # Python
 __pycache__/
 *.pyc
+
+# Phase 7 evaluation artifacts
+.venv/
+results/sweeps/logs/
+results/sweeps/json/
+figures/*.png
