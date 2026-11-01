@@ -66,7 +66,8 @@ admission -> KLog -> (on eviction) threshold admission -> KSet.
 
 ```
 plan.md                     phase-wise implementation plan
-report.md                   Phase 7 reproduction report (paper vs. measured)
+report.md                   Phase 7 reproduction report and Phase 8 validation notes
+docs/phase8.md              Phase 8 correctness, sanitizer, and threshold-model notes
 assets/logo.svg             project logo
 configs/baselines/          generated SA / LS simulator configurations (Phase 1)
 configs/golden/             golden regression config
@@ -74,6 +75,7 @@ configs/sweeps/             Phase 7 sweep configurations + manifest
 results/baselines/          baseline logs + collected CSV (Phase 1)
 results/golden/             golden expected output
 results/sweeps/             Phase 7 CSVs (Figs. 7-12 data, Tables 1 & 4)
+results/theory/             Phase 8 Markov/threshold model output
 figures/                    Phase 7 PDF figures (paper Figs. 7-12 analogues)
 scripts/
   setup-deps.sh             build SCons + libconfig++ into .deps/ (no root)
@@ -86,11 +88,15 @@ scripts/
   run-sweeps.sh             parallel sweep runner (resumable)
   collect-sweeps.py         logs + stats JSON -> per-figure CSVs
   scale.py                  Appendix B trace-scaling calculator (Table 4)
+  markov-threshold.py       Phase 8 threshold occupancy model and validation table
   setup-plot-deps.sh        create .venv with matplotlib/numpy
   make-figures.sh           render figures/*.pdf from the CSVs
 tests/
   run_golden.sh             golden-trace regression test
   golden.expected           committed expected steady-state line
+  run_edge_cases.sh         exact manual edge-case traces
+  configs/edge/            Phase 8 edge-case configs
+  run_sanitizer.sh         ASan/UBSan smoke tests for golden + edge configs
 third_party/Kangaroo/       vendored upstream simulator (with build fixes)
 docs/
   phase1.md                Phase 0/1 notes, build fixes, results
@@ -128,6 +134,19 @@ bash scripts/make-figures.sh            # -> figures/*.pdf
 
 Analysis of every figure against the paper's reported numbers lives in
 [`report.md`](report.md).
+
+### Phase 8 validation
+
+```bash
+bash tests/run_edge_cases.sh
+bash scripts/build-asan.sh
+bash tests/run_sanitizer.sh
+python3 scripts/markov-threshold.py --out results/theory/markov_threshold.csv
+```
+
+`scripts/markov-threshold.py` compares the simulated KSet threshold sweep to a
+Poisson occupancy model inspired by Appendix A / Theorem 1. It writes a table
+under `results/theory/` and is included automatically in `scripts/run-all.sh`.
 
 ## Usage
 
@@ -169,7 +188,11 @@ probability, RRIParoo bits, KLog size, admission threshold) are in
 ## Testing
 
 ```bash
-bash tests/run_golden.sh   # golden-trace regression (exact match)
+bash tests/run_golden.sh           # golden-trace regression (exact match)
+bash tests/run_edge_cases.sh       # manual edge-case traces
+bash scripts/build-asan.sh         # ASan/UBSan target: simulator/bin/asan/cache
+bash tests/run_sanitizer.sh        # golden + edge cases under ASan/UBSan
+python3 scripts/markov-threshold.py # Phase 8 threshold model comparison
 ```
 
 ## Roadmap
@@ -184,7 +207,7 @@ bash tests/run_golden.sh   # golden-trace regression (exact match)
 | 5 | Admission policies | Done |
 | 6 | RRIParoo | Done |
 | 7 | Paper figure reproduction | Done |
-| 8 | Correctness + sanitizers + docs | Planned |
+| 8 | Correctness + sanitizers + docs | Done |
 | 9 | On-flash CacheLib track | Optional (needs HW) |
 | 10 | AdaKanga (adaptive admission) | Scaffolded |
 | 11 | Kangaroo-TTL (expiry-aware) | Scaffolded |
@@ -192,7 +215,7 @@ bash tests/run_golden.sh   # golden-trace regression (exact match)
 ## Contributing
 
 1. Fork and create a feature branch.
-2. Run `scripts/build.sh` and `bash tests/run_golden.sh` before opening a PR.
+2. Run `scripts/build.sh`, `bash tests/run_golden.sh`, and `bash tests/run_edge_cases.sh` before opening a PR.
 3. Keep commits small and focused; follow conventional commit style
    (`feat:`, `fix:`, `docs:`, `test:`, `chore:`).
 

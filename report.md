@@ -146,3 +146,52 @@ Kangaroo trades LS's near-1× WAF for materially fewer misses; RRIParoo,
 pre-flash admission, KLog size, and admission threshold each contribute
 write-rate/miss trade-offs in the paper's direction) are reproduced by the
 46-run sweep in this repository.
+
+---
+
+## 7. Phase 8 — correctness and threshold theory
+
+Phase 8 adds exact correctness tests, sanitizer coverage, and a simple
+Appendix-A-inspired occupancy model for the KSet admission threshold.
+
+### Correctness edge cases
+
+The simulator now handles empty traces, zero-size requests, threshold `1`,
+single-segment log flushes, oversized requests, and duplicate keys without
+crashing or producing inconsistent hit/miss accounting. These are covered by
+`tests/run_edge_cases.sh`.
+
+### Sanitizer coverage
+
+`scripts/build-asan.sh` builds a sanitizer-enabled simulator target at
+`third_party/Kangaroo/simulator/bin/asan/cache`. `tests/run_sanitizer.sh` runs
+the golden trace and the edge cases under ASan/UBSan and checks for sanitizer
+diagnostics. Current runs pass cleanly.
+
+### Markov occupancy check for Fig. 12d
+
+`scripts/markov-threshold.py` models KSet admission as a Poisson occupancy
+event:
+
+```text
+X ~ Poisson(lambda)
+set admitted iff X >= threshold
+```
+
+The model predicts admission probability, expected admitted group size, and a
+calibrated flash write amplification trend. The calibration anchors the
+threshold-2 simulated WAF from `results/sweeps/fig12d_threshold.csv`, then uses
+the Poisson threshold probability to scale the set-write contribution.
+
+| Threshold | Model admission probability | Calibrated model WAF | Simulated WAF |
+|---:|---:|---:|---:|
+| 2 | 0.9449 | 14.5189 | 14.5189 |
+| 3 | 0.8400 | 13.0187 | 12.2445 |
+| 4 | 0.6784 | 10.7058 | 8.4011 |
+| 8 | 0.0972 | 2.3913 | 1.2324 |
+
+The model reproduces the qualitative behavior: increasing the threshold sharply
+reduces KSet set writes and therefore total flash WAF. Absolute differences are
+expected because the simulator's actual occupancy is not perfectly Poisson and
+because its WAF denominator includes implementation-specific pre-log admission
+and set/log write accounting.
