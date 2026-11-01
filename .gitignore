@@ -15,4 +15,5 @@ __pycache__/
 .venv/
 results/sweeps/logs/
 results/sweeps/json/
+results/baselines/logs/
 figures/*.png
