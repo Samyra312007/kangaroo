@@ -66,16 +66,19 @@ admission -> KLog -> (on eviction) threshold admission -> KSet.
 
 ```
 plan.md                     phase-wise implementation plan
-report.md                   Phase 7 reproduction report and Phase 8 validation notes
+report.md                   Phase 7 reproduction report, Phase 8 validation notes, and Phase 9 §5.5 notes
 docs/phase8.md              Phase 8 correctness, sanitizer, and threshold-model notes
+docs/phase9.md              Phase 9 CacheLib/§5.5 production-track notes and simulator-side comparison
 assets/logo.svg             project logo
 configs/baselines/          generated SA / LS simulator configurations (Phase 1)
 configs/golden/             golden regression config
 configs/sweeps/             Phase 7 sweep configurations + manifest
+configs/phase9/             Phase 9 §5.5 simulator configurations
 results/baselines/          baseline logs + collected CSV (Phase 1)
 results/golden/             golden expected output
 results/sweeps/             Phase 7 CSVs (Figs. 7-12 data, Tables 1 & 4)
 results/theory/             Phase 8 Markov/threshold model output
+results/phase9/             Phase 9 §5.5 comparison CSV (logs are gitignored)
 figures/                    Phase 7 PDF figures (paper Figs. 7-12 analogues)
 scripts/
   setup-deps.sh             build SCons + libconfig++ into .deps/ (no root)
@@ -89,6 +92,9 @@ scripts/
   collect-sweeps.py         logs + stats JSON -> per-figure CSVs
   scale.py                  Appendix B trace-scaling calculator (Table 4)
   markov-threshold.py       Phase 8 threshold occupancy model and validation table
+  phase9-simulation.sh      Phase 9 §5.5 simulator-side admission comparison
+  phase9-simulation.py      parser/scorer for the Phase 9 comparison CSV
+  phase9-cachebench.sh      CacheLib raw-flash track wrapper; skips if no hardware
   setup-plot-deps.sh        create .venv with matplotlib/numpy
   make-figures.sh           render figures/*.pdf from the CSVs
 tests/
@@ -148,6 +154,30 @@ python3 scripts/markov-threshold.py --out results/theory/markov_threshold.csv
 Poisson occupancy model inspired by Appendix A / Theorem 1. It writes a table
 under `results/theory/` and is included automatically in `scripts/run-all.sh`.
 
+### Phase 9 — §5.5 pre-flash admission comparison
+
+The simulator-side production track compares all-admit, probabilistic admission,
+and an ML-style admission policy:
+
+```bash
+bash scripts/phase9-simulation.sh
+bash scripts/phase9-cachebench.sh
+```
+
+Outputs are written to `results/phase9/section55.csv`.
+
+| Config | Pre-log policy | Miss rate | Flash WAF | WAF vs random |
+|---|---|---:|---:|---:|
+| all-admit | Random, ratio `1.0` | `0.316707` | `16.175600` | `+11.235%` |
+| random | Random, ratio `0.9` | `0.323943` | `14.541800` | `0.000%` |
+| ml | ML-style logistic score | `0.357504` | `8.087600` | `-44.384%` |
+
+The ML policy uses oracle popularity, object size, bias, and a capped target
+admission ratio. `scripts/phase9-cachebench.sh` is the raw-flash CacheLib track
+wrapper; without CacheLib hardware it intentionally skips instead of inventing
+CacheLab numbers. See [`docs/phase9.md`](docs/phase9.md) for the full production
+track instructions and limitations.
+
 ## Usage
 
 ```bash
@@ -193,6 +223,8 @@ bash tests/run_edge_cases.sh       # manual edge-case traces
 bash scripts/build-asan.sh         # ASan/UBSan target: simulator/bin/asan/cache
 bash tests/run_sanitizer.sh        # golden + edge cases under ASan/UBSan
 python3 scripts/markov-threshold.py # Phase 8 threshold model comparison
+bash scripts/phase9-simulation.sh   # Phase 9 §5.5 simulator comparison
+bash scripts/phase9-cachebench.sh   # Phase 9 CacheLib track; skips without raw flash
 ```
 
 ## Roadmap
@@ -208,7 +240,7 @@ python3 scripts/markov-threshold.py # Phase 8 threshold model comparison
 | 6 | RRIParoo | Done |
 | 7 | Paper figure reproduction | Done |
 | 8 | Correctness + sanitizers + docs | Done |
-| 9 | On-flash CacheLib track | Optional (needs HW) |
+| 9 | On-flash CacheLib track | Simulator side done; raw-flash CacheLab track needs HW |
 | 10 | AdaKanga (adaptive admission) | Scaffolded |
 | 11 | Kangaroo-TTL (expiry-aware) | Scaffolded |
 

@@ -195,3 +195,31 @@ reduces KSet set writes and therefore total flash WAF. Absolute differences are
 expected because the simulator's actual occupancy is not perfectly Poisson and
 because its WAF denominator includes implementation-specific pre-log admission
 and set/log write accounting.
+
+---
+
+## 8. Phase 9 — production §5.5 track and CacheLib limitation
+
+Phase 9 implements the production section 5.5 pre-flash admission comparison in
+the simulator, while explicitly preserving the production CacheLab hardware
+requirement.
+
+The simulator-side comparison runs three configurations:
+
+| Config | Pre-log admission | Miss rate | Flash WAF |
+|---|---|---:|---:|
+| `configs/phase9/all-admit.cfg` | Random, `admitRatio = 1.0` | `0.316707` | `16.175600` |
+| `configs/phase9/random.cfg` | Random, `admitRatio = 0.9` | `0.323943` | `14.541800` |
+| `configs/phase9/ml.cfg` | ML-style logistic feature policy | `0.357504` | `8.087600` |
+
+The ML policy uses oracle popularity, object size, a bias term, and a capped
+target admission ratio. It reduces flash write amplification by about 50%
+relative to all-admit and about 44% relative to probabilistic admission in this
+Zipf workload. The miss-rate penalty is larger than in the production CacheLab
+experiment because the simulator feature model is simplified and the workload is
+synthetic.
+
+The real CacheLab §5.5 evaluation requires raw flash hardware and CacheLib
+`cachebench`. The repository documents this limitation in `docs/phase9.md` and
+provides `scripts/phase9-cachebench.sh`, which skips without a raw device instead
+of fabricating production numbers.

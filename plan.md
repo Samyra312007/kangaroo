@@ -353,6 +353,10 @@ reproduced as trends); deviations explained (trace sampling, simulator approxima
    as an explicit limitation.
 
 **Verification:** Needs a raw flash block device — **skip with a documented limitation if no HW**.
+**Status:** Simulator-side §5.5 comparison is implemented in `configs/phase9/`,
+`third_party/Kangaroo/simulator/admission/ml_admission.hpp`, and
+`scripts/phase9-simulation.sh`. CacheLib raw-flash execution is documented as
+hardware-limited in `docs/phase9.md` and wrapped by `scripts/phase9-cachebench.sh`.
 
 ---
 ### Phase 10 Adaptive Admission & Partitioning (`AdaKanga`)
