@@ -3,6 +3,7 @@
 #include "parser.hpp"
 #include "../config.hpp"
 #include "facebook_tao_parser_simple.hpp"
+#include "manual_parser.hpp"
 #include "zipf_parser.hpp"
 
 parser::Parser* parser::Parser::create(const libconfig::Setting& settings) {
@@ -14,8 +15,11 @@ parser::Parser* parser::Parser::create(const libconfig::Setting& settings) {
     
     auto numKRequests = cfg.read<int>("trace.totalKAccesses", -1);
     int64_t numRequests = 1024 * numKRequests;
-    std::cout << "num requests: " << numRequests << std::endl;
 
+    if (parserType == "Manual") {
+        return new ManualParser(settings);
+    }
+    std::cout << "num requests: " << numRequests << std::endl;
     if (parserType == "Zipf") { 
         assert(numRequests > 0);
         auto alpha = cfg.read<float>("trace.alpha");
