@@ -17,4 +17,6 @@ results/sweeps/logs/
 results/sweeps/json/
 results/baselines/logs/
 results/phase9/logs/
+results/phase10/logs/
+results/phase11/logs/
 figures/*.png
