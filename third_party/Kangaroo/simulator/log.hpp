@@ -45,6 +45,14 @@ class Log : public virtual LogAbstract {
         double calcWriteAmp();
         void flushStats();
 
+        void setCapacity(uint64_t capacity);
+        void setNumPartitions(int partitions);
+        uint64_t capacity() const;
+        uint64_t currentSize() const;
+        int numPartitions() const;
+        int64_t bytesWritten() const;
+        int64_t storesRequestedBytes() const;
+
     private:
         struct IndexEntry {
             candidate_t item;
@@ -59,18 +67,25 @@ class Log : public virtual LogAbstract {
         int64_t _partitionOf(int64_t id) const;
         int32_t _bucketOf(int64_t id) const;
         int64_t _findIndex(int64_t id, int32_t& out_bucket) const;
+        int64_t _findValidIndex(int64_t id, int32_t& out_bucket) const;
         int32_t _insertIndex(const candidate_t& item, int64_t offset);
         void _clearIndex();
 
         void _insert(candidate_t item);
+        void _touchTime(const candidate_t& item);
+        void _dropExpired();
+        void _flushLog();
+        bool _expired(const candidate_t& item) const;
 
         stats::LocalStatsCollector& _log_stats;
         std::vector<IndexEntry> _entries;
         std::vector<int32_t> _heads;
+        int _num_partitions;
         std::unordered_map<candidate_t, uint64_t> _per_item_hits;
         uint64_t _total_capacity;
         uint64_t _total_size;
         uint64_t _readmit;
+        int64_t _current_time;
 };
 
 } // namespace flashCache
