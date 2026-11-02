@@ -46,8 +46,9 @@ and is evaluated in later phases.
 - **Scripted evaluation pipeline**: generate configs, run in parallel, collect
   into CSV, render paper-style figures.
 - **Golden-trace regression test** for bit-for-bit reproducibility.
-- **Two extensions beyond the paper**: *AdaKanga* (online adaptive admission)
-  and *Kangaroo-TTL* (expiry-aware caching).
+- **Two implemented extensions beyond the paper**: *AdaKanga* (online adaptive
+  admission) and *Kangaroo-TTL* (expiry-aware caching with short-TTL flash
+  rejection).
 
 ## Architecture
 
@@ -69,16 +70,22 @@ plan.md                     phase-wise implementation plan
 report.md                   Phase 7 reproduction report, Phase 8 validation notes, and Phase 9 §5.5 notes
 docs/phase8.md              Phase 8 correctness, sanitizer, and threshold-model notes
 docs/phase9.md              Phase 9 CacheLib/§5.5 production-track notes and simulator-side comparison
+docs/phase10_adakanga.md    Phase 10 AdaKanga adaptive admission design and validation
+docs/phase11_ttl.md         Phase 11 Kangaroo-TTL expiration semantics, configs, and validation
 assets/logo.svg             project logo
 configs/baselines/          generated SA / LS simulator configurations (Phase 1)
 configs/golden/             golden regression config
 configs/sweeps/             Phase 7 sweep configurations + manifest
 configs/phase9/             Phase 9 §5.5 simulator configurations
+configs/phase10/            Phase 10 AdaKanga fixed-vs-adaptive configurations
+configs/phase11/            Phase 11 Kangaroo-TTL configurations
 results/baselines/          baseline logs + collected CSV (Phase 1)
 results/golden/             golden expected output
 results/sweeps/             Phase 7 CSVs (Figs. 7-12 data, Tables 1 & 4)
 results/theory/             Phase 8 Markov/threshold model output
 results/phase9/             Phase 9 §5.5 comparison CSV (logs are gitignored)
+results/phase10/            Phase 10 AdaKanga summary JSON
+results/phase11/            Phase 11 Kangaroo-TTL summary JSON
 figures/                    Phase 7 PDF figures (paper Figs. 7-12 analogues)
 scripts/
   setup-deps.sh             build SCons + libconfig++ into .deps/ (no root)
@@ -94,8 +101,12 @@ scripts/
   markov-threshold.py       Phase 8 threshold occupancy model and validation table
   phase9-simulation.sh      Phase 9 §5.5 simulator-side admission comparison
   phase9-simulation.py      parser/scorer for the Phase 9 comparison CSV
-  phase9-cachebench.sh      CacheLib raw-flash track wrapper; skips if no hardware
-  setup-plot-deps.sh        create .venv with matplotlib/numpy
+   phase9-cachebench.sh      CacheLib raw-flash track wrapper; skips if no hardware
+   generate_phase10_workload.py generate Phase 10 AdaKanga configs
+   validate_phase10.py       run AdaKanga fixed-vs-adaptive validation
+   generate_phase11_workload.py generate Phase 11 Kangaroo-TTL configs
+   validate_phase11.py       run TTL/short-TTL admission validation
+   setup-plot-deps.sh        create .venv with matplotlib/numpy
   make-figures.sh           render figures/*.pdf from the CSVs
 tests/
   run_golden.sh             golden-trace regression test
@@ -178,6 +189,49 @@ wrapper; without CacheLib hardware it intentionally skips instead of inventing
 CacheLab numbers. See [`docs/phase9.md`](docs/phase9.md) for the full production
 track instructions and limitations.
 
+### Phase 10 — AdaKanga adaptive admission
+
+AdaKanga replaces fixed admission settings with an online controller that adapts
+admission probability, KLog fraction, and KLog partitions from interval feedback.
+
+```bash
+python3 scripts/generate_phase10_workload.py
+python3 scripts/validate_phase10.py
+```
+
+The validator writes `results/phase10/summary.json` and checks that adaptive
+AdaKanga matches the best fixed static configuration within 2% and improves the
+workload-shift trace without violating the configured write ceiling.
+
+See [`docs/phase10_adakanga.md`](docs/phase10_adakanga.md) for details.
+
+### Phase 11 — Kangaroo-TTL expiry-aware caching
+
+Phase 11 adds object expiration to Kangaroo. Expired objects never count as hits,
+expired records are dropped before flash writes, and short-TTL objects are rejected
+by the Adaptive admission policy before they consume flash capacity.
+
+```bash
+python3 scripts/generate_phase11_workload.py
+python3 scripts/validate_phase11.py
+```
+
+The validator writes `results/phase11/summary.json`. At the current Phase 11
+settings:
+
+| Config | Miss rate | Flash write amp | Flash bytes written | Live flash bytes | Short-TTL rejects | Expired misses |
+|---|---:|---:|---:|---:|---:|---:|
+| `vanilla.cfg` | 0.103247 | 0.909236 | 4,677,632 | 4,677,632 | 0 | 0 |
+| `ttl.cfg` | 0.849376 | 0.000000 | 0 | 0 | 1,000 | 9,000 |
+| `ttl_no_short.cfg` | 0.849376 | 0.052873 | 4,153,344 | 4,153,344 | 0 | 9,000 |
+
+Phase 11 passes the intended correctness and performance checks: expired objects
+are not counted as hits, short-TTL admission rejects short-lived objects, Kangaroo-TTL
+reduces flash writes and write amplification versus vanilla, and long-lived
+workloads do not regress.
+
+See [`docs/phase11_ttl.md`](docs/phase11_ttl.md) for the full Phase 11 design.
+
 ## Usage
 
 ```bash
@@ -225,6 +279,10 @@ bash tests/run_sanitizer.sh        # golden + edge cases under ASan/UBSan
 python3 scripts/markov-threshold.py # Phase 8 threshold model comparison
 bash scripts/phase9-simulation.sh   # Phase 9 §5.5 simulator comparison
 bash scripts/phase9-cachebench.sh   # Phase 9 CacheLib track; skips without raw flash
+python3 scripts/generate_phase10_workload.py
+python3 scripts/validate_phase10.py
+python3 scripts/generate_phase11_workload.py
+python3 scripts/validate_phase11.py
 ```
 
 ## Roadmap
@@ -241,8 +299,8 @@ bash scripts/phase9-cachebench.sh   # Phase 9 CacheLib track; skips without raw 
 | 7 | Paper figure reproduction | Done |
 | 8 | Correctness + sanitizers + docs | Done |
 | 9 | On-flash CacheLib track | Simulator side done; raw-flash CacheLab track needs HW |
-| 10 | AdaKanga (adaptive admission) | Scaffolded |
-| 11 | Kangaroo-TTL (expiry-aware) | Scaffolded |
+| 10 | AdaKanga (adaptive admission) | Done |
+| 11 | Kangaroo-TTL (expiry-aware) | Done |
 
 ## Contributing
 
