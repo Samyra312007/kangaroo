@@ -68,7 +68,11 @@ void Policy::trackAdmitted(std::vector<candidate_t> items) {
 }
 
 double Policy::byteRatioAdmitted() {
-    return _admission_stats["sizeAdmits"] / (double) _admission_stats["sizePossibleAdmits"];
+    int64_t possible = _admission_stats.get("sizePossibleAdmits");
+    if (possible <= 0) {
+        return 1.0;
+    }
+    return _admission_stats.get("sizeAdmits") / (double) possible;
 }
 
 void Policy::performReadmission(std::vector<candidate_t> evicted) {

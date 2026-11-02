@@ -17,6 +17,12 @@ public:
     virtual std::unordered_map<uint64_t, std::vector<candidate_t>> admit(std::vector<candidate_t> items) = 0;
     virtual std::vector<candidate_t> admit_simple(std::vector<candidate_t> items) = 0;
 
+    /* Phase 10 AdaKanga controller hook: observe cache accesses for feedback */
+    virtual void noteAccess(candidate_t item, bool hit) {
+        (void) item;
+        (void) hit;
+    }
+
     /* the settings here is assumed to just be for the specific admission policy 
      * since multiple admission policies are possible and the cache should decide how 
      * to concatenate them */
