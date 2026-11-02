@@ -21,4 +21,12 @@ python3 scripts/markov-threshold.py >/dev/null
 if [ "${RUN_PHASE9:-1}" = "1" ]; then
   bash scripts/phase9-simulation.sh >/dev/null
 fi
-echo "run-all: DONE -> results/baselines/baseline_results.csv, results/theory/markov_threshold.csv, results/phase9/section55.csv"
+if [ "${RUN_PHASE10:-1}" = "1" ]; then
+  python3 scripts/generate_phase10_workload.py >/dev/null
+  python3 scripts/validate_phase10.py >/dev/null
+fi
+if [ "${RUN_PHASE11:-1}" = "1" ]; then
+  python3 scripts/generate_phase11_workload.py >/dev/null
+  python3 scripts/validate_phase11.py >/dev/null
+fi
+echo "run-all: DONE -> results/baselines/baseline_results.csv, results/theory/markov_threshold.csv, results/phase9/section55.csv, results/phase10/summary.json, results/phase11/summary.json"
