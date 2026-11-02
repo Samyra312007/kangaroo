@@ -1,0 +1,630 @@
+{
+  "configs": {
+    "long_only_ttl.cfg": {
+      "config": "long_only_ttl.cfg",
+      "finalMissRate": 0.1,
+      "finalFlashWriteAmp": 0.0,
+      "finalAdaKanga": null,
+      "expiredMisses": 0,
+      "expiredMissSize": 0,
+      "expiredDrops": 0,
+      "expiredBytesDropped": 0,
+      "expiredSkippedStores": 0,
+      "expiredBytesSkipped": 0,
+      "logStoreRequestedBytes": 0,
+      "setStoreRequestedBytes": 0,
+      "logBytesWritten": 0,
+      "setBytesWritten": 0,
+      "totalFlashBytesWritten": 0,
+      "logLiveBytes": 0,
+      "setLiveBytes": 0,
+      "liveFlashBytes": 0,
+      "shortTtlRejected": 0,
+      "shortTtlRejectedBytes": 0,
+      "finalStats": {
+        "adaptive": {
+          "admitRatioPermille": 900,
+          "expiredRejected": 0,
+          "expiredRejectedBytes": 0,
+          "intervalAdmittedBytes": 0,
+          "intervalLogBytesWritten": 0,
+          "logCapacityBytes": 10485760,
+          "logFractionPermille": 1000,
+          "maxIntervalWriteBytes": 0,
+          "minAdmitHits": 1,
+          "partitions": 4,
+          "setThreshold": 1,
+          "shortTtl": 1000,
+          "shortTtlRejected": 0,
+          "shortTtlRejectedBytes": 0,
+          "writeCeilingBytes": 20000000
+        },
+        "log": {
+          "current_size": 0,
+          "logCapacity": 10485760,
+          "logPartitions": 4,
+          "misses": 201
+        },
+        "sets": {
+          "misses": 201,
+          "numHashFunctions": 1,
+          "numSets": 2560,
+          "rripBits": 3,
+          "rripEvictions": 0,
+          "rripPromotions": 0,
+          "setCapacity": 4096
+        },
+        "memCache": {
+          "current_size": 1646592,
+          "hits": 1809,
+          "lruCacheCapacity": 5021324,
+          "misses": 201
+        },
+        "global": {
+          "accessesAfterFlush": 2010,
+          "compulsoryMisses": 201,
+          "hits": 1809,
+          "hitsSize": 14819328,
+          "misses": 201,
+          "missesSize": 1646592,
+          "timestamp": 2009,
+          "totalAccesses": 2010,
+          "uniqueBytes": 1646592
+        }
+      }
+    },
+    "long_only_vanilla.cfg": {
+      "config": "long_only_vanilla.cfg",
+      "finalMissRate": 0.1,
+      "finalFlashWriteAmp": 0.0,
+      "finalAdaKanga": null,
+      "expiredMisses": 0,
+      "expiredMissSize": 0,
+      "expiredDrops": 0,
+      "expiredBytesDropped": 0,
+      "expiredSkippedStores": 0,
+      "expiredBytesSkipped": 0,
+      "logStoreRequestedBytes": 0,
+      "setStoreRequestedBytes": 0,
+      "logBytesWritten": 0,
+      "setBytesWritten": 0,
+      "totalFlashBytesWritten": 0,
+      "logLiveBytes": 0,
+      "setLiveBytes": 0,
+      "liveFlashBytes": 0,
+      "shortTtlRejected": 0,
+      "shortTtlRejectedBytes": 0,
+      "finalStats": {
+        "adaptive": {},
+        "log": {
+          "current_size": 0,
+          "logCapacity": 10485760,
+          "logPartitions": 4,
+          "misses": 201
+        },
+        "sets": {
+          "misses": 201,
+          "numHashFunctions": 1,
+          "numSets": 2560,
+          "rripBits": 3,
+          "rripEvictions": 0,
+          "rripPromotions": 0,
+          "setCapacity": 4096
+        },
+        "memCache": {
+          "current_size": 1646592,
+          "hits": 1809,
+          "lruCacheCapacity": 5021324,
+          "misses": 201
+        },
+        "global": {
+          "accessesAfterFlush": 2010,
+          "compulsoryMisses": 201,
+          "hits": 1809,
+          "hitsSize": 14819328,
+          "misses": 201,
+          "missesSize": 1646592,
+          "timestamp": 2009,
+          "totalAccesses": 2010,
+          "uniqueBytes": 1646592
+        }
+      }
+    },
+    "long_ttl_ttl.cfg": {
+      "config": "long_ttl_ttl.cfg",
+      "finalMissRate": 0.1,
+      "finalFlashWriteAmp": 0.0,
+      "finalAdaKanga": null,
+      "expiredMisses": 0,
+      "expiredMissSize": 0,
+      "expiredDrops": 0,
+      "expiredBytesDropped": 0,
+      "expiredSkippedStores": 0,
+      "expiredBytesSkipped": 0,
+      "logStoreRequestedBytes": 0,
+      "setStoreRequestedBytes": 0,
+      "logBytesWritten": 0,
+      "setBytesWritten": 0,
+      "totalFlashBytesWritten": 0,
+      "logLiveBytes": 0,
+      "setLiveBytes": 0,
+      "liveFlashBytes": 0,
+      "shortTtlRejected": 0,
+      "shortTtlRejectedBytes": 0,
+      "finalStats": {
+        "adaptive": {
+          "admitRatioPermille": 900,
+          "expiredRejected": 0,
+          "expiredRejectedBytes": 0,
+          "intervalAdmittedBytes": 0,
+          "intervalLogBytesWritten": 0,
+          "logCapacityBytes": 10485760,
+          "logFractionPermille": 1000,
+          "maxIntervalWriteBytes": 0,
+          "minAdmitHits": 1,
+          "partitions": 4,
+          "setThreshold": 1,
+          "shortTtl": 1000,
+          "shortTtlRejected": 0,
+          "shortTtlRejectedBytes": 0,
+          "writeCeilingBytes": 20000000
+        },
+        "log": {
+          "current_size": 0,
+          "logCapacity": 10485760,
+          "logPartitions": 4,
+          "misses": 201
+        },
+        "sets": {
+          "misses": 201,
+          "numHashFunctions": 1,
+          "numSets": 2560,
+          "rripBits": 3,
+          "rripEvictions": 0,
+          "rripPromotions": 0,
+          "setCapacity": 4096
+        },
+        "memCache": {
+          "current_size": 1646592,
+          "hits": 1809,
+          "lruCacheCapacity": 5021324,
+          "misses": 201
+        },
+        "global": {
+          "accessesAfterFlush": 2010,
+          "compulsoryMisses": 201,
+          "hits": 1809,
+          "hitsSize": 14819328,
+          "misses": 201,
+          "missesSize": 1646592,
+          "timestamp": 2009,
+          "totalAccesses": 2010,
+          "uniqueBytes": 1646592
+        }
+      }
+    },
+    "long_ttl_vanilla.cfg": {
+      "config": "long_ttl_vanilla.cfg",
+      "finalMissRate": 0.1,
+      "finalFlashWriteAmp": 0.0,
+      "finalAdaKanga": null,
+      "expiredMisses": 0,
+      "expiredMissSize": 0,
+      "expiredDrops": 0,
+      "expiredBytesDropped": 0,
+      "expiredSkippedStores": 0,
+      "expiredBytesSkipped": 0,
+      "logStoreRequestedBytes": 0,
+      "setStoreRequestedBytes": 0,
+      "logBytesWritten": 0,
+      "setBytesWritten": 0,
+      "totalFlashBytesWritten": 0,
+      "logLiveBytes": 0,
+      "setLiveBytes": 0,
+      "liveFlashBytes": 0,
+      "shortTtlRejected": 0,
+      "shortTtlRejectedBytes": 0,
+      "finalStats": {
+        "adaptive": {},
+        "log": {
+          "current_size": 0,
+          "logCapacity": 10485760,
+          "logPartitions": 4,
+          "misses": 201
+        },
+        "sets": {
+          "misses": 201,
+          "numHashFunctions": 1,
+          "numSets": 2560,
+          "rripBits": 3,
+          "rripEvictions": 0,
+          "rripPromotions": 0,
+          "setCapacity": 4096
+        },
+        "memCache": {
+          "current_size": 1646592,
+          "hits": 1809,
+          "lruCacheCapacity": 5021324,
+          "misses": 201
+        },
+        "global": {
+          "accessesAfterFlush": 2010,
+          "compulsoryMisses": 201,
+          "hits": 1809,
+          "hitsSize": 14819328,
+          "misses": 201,
+          "missesSize": 1646592,
+          "timestamp": 2009,
+          "totalAccesses": 2010,
+          "uniqueBytes": 1646592
+        }
+      }
+    },
+    "test_small.cfg": {
+      "config": "test_small.cfg",
+      "finalMissRate": 0.5,
+      "finalFlashWriteAmp": 0.0,
+      "finalAdaKanga": "admitRatio=1 threshold=1 minAdmitHits=1 logFraction=0.5 partitions=4 logBytes=5242880",
+      "expiredMisses": 0,
+      "expiredMissSize": 0,
+      "expiredDrops": 0,
+      "expiredBytesDropped": 0,
+      "expiredSkippedStores": 0,
+      "expiredBytesSkipped": 0,
+      "logStoreRequestedBytes": 0,
+      "setStoreRequestedBytes": 0,
+      "logBytesWritten": 0,
+      "setBytesWritten": 0,
+      "totalFlashBytesWritten": 0,
+      "logLiveBytes": 0,
+      "setLiveBytes": 0,
+      "liveFlashBytes": 0,
+      "shortTtlRejected": 0,
+      "shortTtlRejectedBytes": 0,
+      "finalStats": {
+        "adaptive": {
+          "admitRatioPermille": 1000,
+          "bestIntervalMissRate": 5000,
+          "controllerIntervals": 3,
+          "expiredRejected": 0,
+          "expiredRejectedBytes": 0,
+          "intervalAdmittedBytes": 0,
+          "intervalLogBytesWritten": 0,
+          "lastIntervalAdmittedBytes": 0,
+          "lastIntervalLogBytesWritten": 0,
+          "lastIntervalMissRate": 5000,
+          "lastIntervalWriteRateBytes": 0,
+          "logCapacityBytes": 5242880,
+          "logFractionPermille": 500,
+          "maxIntervalWriteBytes": 0,
+          "minAdmitHits": 1,
+          "partitions": 4,
+          "setThreshold": 1,
+          "shortTtl": 50,
+          "shortTtlRejected": 0,
+          "shortTtlRejectedBytes": 0,
+          "writeCeilingBytes": 10000000
+        },
+        "log": {
+          "current_size": 0,
+          "logCapacity": 5242880,
+          "logPartitions": 4,
+          "misses": 3
+        },
+        "sets": {
+          "misses": 3,
+          "numHashFunctions": 1,
+          "numSets": 2560,
+          "rripBits": 3,
+          "rripEvictions": 0,
+          "rripPromotions": 0,
+          "setCapacity": 4096
+        },
+        "memCache": {
+          "current_size": 24576,
+          "hits": 3,
+          "lruCacheCapacity": 5021324,
+          "misses": 3
+        },
+        "global": {
+          "accessesAfterFlush": 6,
+          "compulsoryMisses": 3,
+          "hits": 3,
+          "hitsSize": 24576,
+          "misses": 3,
+          "missesSize": 24576,
+          "timestamp": 5,
+          "totalAccesses": 6,
+          "uniqueBytes": 24576
+        }
+      }
+    },
+    "ttl.cfg": {
+      "config": "ttl.cfg",
+      "finalMissRate": 0.849376,
+      "finalFlashWriteAmp": 0.0,
+      "finalAdaKanga": "admitRatio=0.9 threshold=1 minAdmitHits=1 logFraction=0.9 partitions=4 logBytes=9437184",
+      "expiredMisses": 9000,
+      "expiredMissSize": 73728000,
+      "expiredDrops": 0,
+      "expiredBytesDropped": 0,
+      "expiredSkippedStores": 0,
+      "expiredBytesSkipped": 0,
+      "logStoreRequestedBytes": 0,
+      "setStoreRequestedBytes": 0,
+      "logBytesWritten": 0,
+      "setBytesWritten": 0,
+      "totalFlashBytesWritten": 0,
+      "logLiveBytes": 0,
+      "setLiveBytes": 0,
+      "liveFlashBytes": 0,
+      "shortTtlRejected": 1000,
+      "shortTtlRejectedBytes": 8192000,
+      "finalStats": {
+        "adaptive": {
+          "admitRatioPermille": 900,
+          "bestIntervalMissRate": 0,
+          "controllerDecisions": 4,
+          "controllerIntervals": 12,
+          "expiredRejected": 8589,
+          "expiredRejectedBytes": 70361088,
+          "intervalAdmittedBytes": 0,
+          "intervalLogBytesWritten": 0,
+          "lastIntervalAdmittedBytes": 0,
+          "lastIntervalLogBytesWritten": 0,
+          "lastIntervalMissRate": 0,
+          "lastIntervalWriteRateBytes": 0,
+          "logCapacityBytes": 9437184,
+          "logFractionPermille": 899,
+          "maxIntervalWriteBytes": 0,
+          "minAdmitHits": 1,
+          "numPossibleAdmits": 9589,
+          "partitions": 4,
+          "setThreshold": 1,
+          "shortTtl": 1000,
+          "shortTtlRejected": 1000,
+          "shortTtlRejectedBytes": 8192000,
+          "sizePossibleAdmits": 78553088,
+          "trackAdmittedCalls": 9589,
+          "trackPossibleAdmitsCalls": 9589,
+          "writeCeilingBytes": 3000000
+        },
+        "log": {
+          "current_size": 0,
+          "logCapacity": 9437184,
+          "logPartitions": 4,
+          "misses": 1201
+        },
+        "sets": {
+          "misses": 1201,
+          "numHashFunctions": 1,
+          "numSets": 2560,
+          "rripBits": 3,
+          "rripEvictions": 0,
+          "rripPromotions": 0,
+          "setCapacity": 4096
+        },
+        "memCache": {
+          "current_size": 5013504,
+          "hits": 1809,
+          "lruCacheCapacity": 5021324,
+          "misses": 1201,
+          "numEvictions": 9589,
+          "sizeEvictions": 78553088
+        },
+        "global": {
+          "accessesAfterFlush": 12010,
+          "compulsoryMisses": 1201,
+          "expiredMissSize": 73728000,
+          "expiredMisses": 9000,
+          "hits": 1809,
+          "hitsSize": 14819328,
+          "misses": 10201,
+          "missesSize": 83566592,
+          "timestamp": 12009,
+          "totalAccesses": 12010,
+          "uniqueBytes": 9838592
+        }
+      }
+    },
+    "ttl_no_short.cfg": {
+      "config": "ttl_no_short.cfg",
+      "finalMissRate": 0.849376,
+      "finalFlashWriteAmp": 0.0528731,
+      "finalAdaKanga": "admitRatio=0.9 threshold=1 minAdmitHits=1 logFraction=0.9 partitions=4 logBytes=9437184",
+      "expiredMisses": 9000,
+      "expiredMissSize": 73728000,
+      "expiredDrops": 0,
+      "expiredBytesDropped": 0,
+      "expiredSkippedStores": 0,
+      "expiredBytesSkipped": 0,
+      "logStoreRequestedBytes": 4153344,
+      "setStoreRequestedBytes": 0,
+      "logBytesWritten": 4153344,
+      "setBytesWritten": 0,
+      "totalFlashBytesWritten": 4153344,
+      "logLiveBytes": 4153344,
+      "setLiveBytes": 0,
+      "liveFlashBytes": 4153344,
+      "shortTtlRejected": 0,
+      "shortTtlRejectedBytes": 0,
+      "finalStats": {
+        "adaptive": {
+          "admitRatioPermille": 900,
+          "bestIntervalMissRate": 0,
+          "controllerDecisions": 4,
+          "controllerIntervals": 12,
+          "expiredRejected": 8589,
+          "expiredRejectedBytes": 70361088,
+          "intervalAdmittedBytes": 0,
+          "intervalLogBytesWritten": 0,
+          "lastIntervalAdmittedBytes": 0,
+          "lastIntervalLogBytesWritten": 0,
+          "lastIntervalMissRate": 0,
+          "lastIntervalWriteRateBytes": 0,
+          "logCapacityBytes": 9437184,
+          "logFractionPermille": 899,
+          "maxIntervalWriteBytes": 2555904,
+          "minAdmitHits": 1,
+          "numAdmits": 507,
+          "numPossibleAdmits": 9589,
+          "partitions": 4,
+          "setThreshold": 1,
+          "shortTtl": 0,
+          "shortTtlRejected": 0,
+          "shortTtlRejectedBytes": 0,
+          "sizeAdmits": 4153344,
+          "sizePossibleAdmits": 78553088,
+          "trackAdmittedCalls": 9589,
+          "trackPossibleAdmitsCalls": 9589,
+          "writeCeilingBytes": 3000000
+        },
+        "log": {
+          "bytes_written": 4153344,
+          "current_size": 4153344,
+          "logCapacity": 9437184,
+          "logPartitions": 4,
+          "misses": 1201,
+          "stores_requested": 507,
+          "stores_requested_bytes": 4153344
+        },
+        "sets": {
+          "misses": 1201,
+          "numHashFunctions": 1,
+          "numSets": 2560,
+          "rripBits": 3,
+          "rripEvictions": 0,
+          "rripPromotions": 0,
+          "setCapacity": 4096
+        },
+        "memCache": {
+          "current_size": 5013504,
+          "hits": 1809,
+          "lruCacheCapacity": 5021324,
+          "misses": 1201,
+          "numEvictions": 9589,
+          "sizeEvictions": 78553088
+        },
+        "global": {
+          "accessesAfterFlush": 12010,
+          "compulsoryMisses": 1201,
+          "expiredMissSize": 73728000,
+          "expiredMisses": 9000,
+          "hits": 1809,
+          "hitsSize": 14819328,
+          "misses": 10201,
+          "missesSize": 83566592,
+          "timestamp": 12009,
+          "totalAccesses": 12010,
+          "uniqueBytes": 9838592
+        }
+      }
+    },
+    "vanilla.cfg": {
+      "config": "vanilla.cfg",
+      "finalMissRate": 0.103247,
+      "finalFlashWriteAmp": 0.909236,
+      "finalAdaKanga": null,
+      "expiredMisses": 0,
+      "expiredMissSize": 0,
+      "expiredDrops": 0,
+      "expiredBytesDropped": 0,
+      "expiredSkippedStores": 0,
+      "expiredBytesSkipped": 0,
+      "logStoreRequestedBytes": 4677632,
+      "setStoreRequestedBytes": 0,
+      "logBytesWritten": 4677632,
+      "setBytesWritten": 0,
+      "totalFlashBytesWritten": 4677632,
+      "logLiveBytes": 4677632,
+      "setLiveBytes": 0,
+      "liveFlashBytes": 4677632,
+      "shortTtlRejected": 0,
+      "shortTtlRejectedBytes": 0,
+      "finalStats": {
+        "adaptive": {},
+        "log": {
+          "bytes_written": 4677632,
+          "current_size": 4677632,
+          "hits": 3492,
+          "logCapacity": 10485760,
+          "logPartitions": 4,
+          "misses": 1240,
+          "stores_requested": 571,
+          "stores_requested_bytes": 4677632
+        },
+        "sets": {
+          "misses": 1240,
+          "numHashFunctions": 1,
+          "numSets": 2560,
+          "rripBits": 3,
+          "rripEvictions": 0,
+          "rripPromotions": 0,
+          "setCapacity": 4096
+        },
+        "memCache": {
+          "current_size": 5013504,
+          "hits": 7278,
+          "lruCacheCapacity": 5021324,
+          "misses": 4732,
+          "numEvictions": 628,
+          "sizeEvictions": 5144576
+        },
+        "global": {
+          "accessesAfterFlush": 12010,
+          "compulsoryMisses": 1201,
+          "hits": 10770,
+          "hitsSize": 88227840,
+          "misses": 1240,
+          "missesSize": 10158080,
+          "timestamp": 12009,
+          "totalAccesses": 12010,
+          "uniqueBytes": 9838592
+        }
+      }
+    }
+  },
+  "criteria": {
+    "expiredObjectsAreNeverHits": true,
+    "shortTtlAdmissionRejected": true,
+    "shortTtlFlashWritesReducedVsVanilla": true,
+    "shortTtlFlashWriteAmpReducedVsVanilla": true,
+    "liveFlashBytesReducedVsVanilla": true,
+    "longOnlyMissNoRegression": true,
+    "longTtlMissNoRegression": true
+  },
+  "metrics": {
+    "vanilla": {
+      "missRate": 0.103247,
+      "flashWriteAmp": 0.909236,
+      "totalFlashBytesWritten": 4677632,
+      "liveFlashBytes": 4677632
+    },
+    "ttl": {
+      "missRate": 0.849376,
+      "flashWriteAmp": 0.0,
+      "totalFlashBytesWritten": 0,
+      "liveFlashBytes": 0,
+      "expiredMisses": 9000,
+      "shortTtlRejected": 1000,
+      "shortTtlRejectedBytes": 8192000
+    },
+    "ttlNoShort": {
+      "missRate": 0.849376,
+      "flashWriteAmp": 0.0528731,
+      "totalFlashBytesWritten": 4153344,
+      "liveFlashBytes": 4153344,
+      "expiredMisses": 9000
+    },
+    "longOnly": {
+      "vanillaMissRate": 0.1,
+      "ttlMissRate": 0.1,
+      "relativeDelta": 0.0
+    },
+    "longTtl": {
+      "vanillaMissRate": 0.1,
+      "ttlMissRate": 0.1,
+      "relativeDelta": 0.0
+    }
+  }
+}
