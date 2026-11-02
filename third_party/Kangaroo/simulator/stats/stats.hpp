@@ -17,6 +17,7 @@ class StatsCollector;
 class LocalStatsCollector {
     public:
         int64_t &operator[](std::string name);
+        int64_t get(std::string name) const;
         void print();
         friend class StatsCollector;
         ~LocalStatsCollector() {}

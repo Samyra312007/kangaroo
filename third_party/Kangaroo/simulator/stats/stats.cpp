@@ -18,6 +18,11 @@ int64_t &LocalStatsCollector::operator[](std::string name) {
     return counters[name];
 }
 
+int64_t LocalStatsCollector::get(std::string name) const {
+    auto it = counters.find(name);
+    return it == counters.end() ? 0 : it->second;
+}
+
 StatsCollector::StatsCollector(std::string output_filename) {
     std::cout << "Stats file at " << output_filename << std::endl;
     _outputFile.open(output_filename);
