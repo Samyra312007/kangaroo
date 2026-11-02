@@ -36,6 +36,11 @@ class SetsAbstract {
         /* returns ratio of total capacity used */
         virtual double ratioCapacityUsed() = 0;
 
+        /* Phase 10 AdaKanga controller hooks */
+        virtual int64_t bytesWritten() const { return 0; }
+        virtual int64_t storesRequestedBytes() const { return 0; }
+        virtual uint64_t capacity() const { return 0; }
+
         /* ----------- Other Bookeeping --------------- */
 
         virtual double calcWriteAmp() = 0;

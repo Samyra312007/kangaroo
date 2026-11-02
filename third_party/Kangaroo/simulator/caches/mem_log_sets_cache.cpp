@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 
 #include "caches/mem_log_sets_cache.hpp"
 #include "config.hpp"
@@ -62,6 +63,13 @@ MemLogSetsCache::MemLogSetsCache(stats::StatsCollector* sc, stats::LocalStatsCol
         _log = new flashCache::Log(log_capacity, log_stats, readmit);
     }
 
+    if (cfg.exists("log.partitions")) {
+        int partitions = cfg.read<int>("log.partitions");
+        if (partitions > 0) {
+            _log->setNumPartitions(partitions);
+        }
+    }
+
     /* Initialize memory cache, size takes into account indexing overhead 
      * of index to log, and set nru tracking */
     uint64_t sets_memory_consumption = _sets->calcMemoryConsumption();
@@ -79,10 +87,17 @@ MemLogSetsCache::MemLogSetsCache(stats::StatsCollector* sc, stats::LocalStatsCol
     /* Initialize prelog admission policy */
     if (cfg.exists("preLogAdmission")) {
         std::string policyType = cfg.read<const char*>("preLogAdmission.policy");
-        policyType.append(".preLogAdmission");
         const libconfig::Setting& admission_settings = cfg.read<libconfig::Setting&>("preLogAdmission");
-        auto& admission_stats = statsCollector->createLocalCollector(policyType);
-        _prelog_admission = admission::Policy::create(admission_settings, _sets, _log, admission_stats);
+
+        if (policyType == "Adaptive") {
+            auto& admission_stats = statsCollector->createLocalCollector("Adaptive.preLogAdmission");
+            _dynamic_admission = admission::Policy::create(admission_settings, _sets, _log, admission_stats);
+            _prelog_admission = _dynamic_admission;
+        } else {
+            policyType.append(".preLogAdmission");
+            auto& admission_stats = statsCollector->createLocalCollector(policyType);
+            _prelog_admission = admission::Policy::create(admission_settings, _sets, _log, admission_stats);
+        }
     }
     
     /* Initialize preset admission policy */
@@ -125,7 +140,7 @@ void MemLogSetsCache::insert(candidate_t id) {
         for (auto set: admitted) {
             ret.insert(ret.end(), set.second.begin(), set.second.end());
         }
-    } 
+    }
     ret = _log->insert(ret);
     if (ret.size()) {
         if (warmed_up && _preset_admission) {
@@ -155,7 +170,13 @@ void MemLogSetsCache::insert(candidate_t id) {
 }
 
 bool MemLogSetsCache::find(candidate_t id) {
-    if (_memCache->find(id) || _log->find(id) || _sets->find(id)) {
+    if (_memCache->find(id)) {
+        return true;
+    }
+    if (_log->find(id)) {
+        return true;
+    }
+    if (_sets->find(id)) {
         return true;
     }
     return false;

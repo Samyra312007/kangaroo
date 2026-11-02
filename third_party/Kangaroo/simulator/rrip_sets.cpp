@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <iostream>
 #include <list>
 #include <math.h>
 
@@ -29,6 +31,46 @@ RripSets::RripSets(uint64_t num_sets, uint64_t set_capacity,
     _set_stats["rripBits"] = bits;
     _set_stats["rripPromotions"] = 0;
     _set_stats["rripEvictions"] = 0;
+}
+
+void RripSets::_touchTime(const candidate_t& item) {
+    _current_time = std::max(_current_time, item.request_time);
+}
+
+bool RripSets::_expired(const candidate_t& item) const {
+    return item.expire_time != 0 && _current_time >= item.expire_time;
+}
+
+void RripSets::_dropExpiredBin(uint64_t bin_num) {
+    assert(bin_num < _num_sets);
+    Bin& bin = _bins[bin_num];
+    bool removed = false;
+
+    for (auto it = bin.rrpv_to_items.begin(); it != bin.rrpv_to_items.end();) {
+        auto& items = it->second;
+        for (auto item_it = items.begin(); item_it != items.end();) {
+            if (_expired(*item_it)) {
+                _set_stats["expiredDrops"]++;
+                _set_stats["expiredBytesDropped"] += item_it->obj_size;
+                bin.bin_size -= item_it->obj_size;
+                _total_size -= item_it->obj_size;
+                removed = true;
+                item_it = items.erase(item_it);
+            } else {
+                ++item_it;
+            }
+        }
+
+        if (items.empty()) {
+            it = bin.rrpv_to_items.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    if (removed) {
+        _set_stats["current_size"] = _total_size;
+    }
 }
 
 void RripSets::_incrementRrpvValues(uint64_t bin_num) {
@@ -119,15 +161,23 @@ std::vector<candidate_t> RripSets::insert(std::vector<candidate_t> items) {
     std::vector<bool> sets_touched(_num_sets, false);
     std::vector<candidate_t> evicted;
     for (auto item: items) {
+        _touchTime(item);
+        _updateStatsRequestedStore(item);
+        if (_expired(item)) {
+            _set_stats["expiredSkippedStores"]++;
+            _set_stats["expiredBytesSkipped"] += item.obj_size;
+            continue;
+        }
+
         uint64_t bin_num = *findSetNums(item).begin();
         assert(bin_num < _num_sets);
         if (!sets_touched[bin_num]) {
             _incrementRrpvValues(bin_num);
         }
+        _dropExpiredBin(bin_num);
         sets_touched[bin_num] = true;
         std::vector<candidate_t> local_evict = _insert(item, bin_num);
         evicted.insert(evicted.end(), local_evict.begin(), local_evict.end());
-        _updateStatsRequestedStore(item);
     }
     uint64_t num_sets_touched = std::count(sets_touched.begin(), sets_touched.end(), true);
     _updateStatsActualStore(num_sets_touched);
@@ -138,15 +188,34 @@ std::vector<candidate_t> RripSets::insert(std::vector<candidate_t> items) {
 std::vector<candidate_t> RripSets::insert(uint64_t set_num, std::vector<candidate_t> items) {
     std::vector<candidate_t> evicted;
     assert(set_num < _num_sets);
-    _incrementRrpvValues(set_num);
+
+    bool any_non_expired = false;
     for (auto item: items) {
+        _touchTime(item);
+        _updateStatsRequestedStore(item);
+        if (_expired(item)) {
+            _set_stats["expiredSkippedStores"]++;
+            _set_stats["expiredBytesSkipped"] += item.obj_size;
+        } else {
+            any_non_expired = true;
+        }
+    }
+
+    if (!any_non_expired) {
+        return evicted;
+    }
+
+    _incrementRrpvValues(set_num);
+    _dropExpiredBin(set_num);
+    for (auto item: items) {
+        _touchTime(item);
+        if (_expired(item)) {
+            continue;
+        }
         std::vector<candidate_t> local_evict = _insert(item, set_num);
         evicted.insert(evicted.end(), local_evict.begin(), local_evict.end());
-        _updateStatsRequestedStore(item);
     }
-    if (items.size() > 0) {
-        _updateStatsActualStore(1);
-    }
+    _updateStatsActualStore(1);
     assert(_total_capacity >= _total_size);
     return evicted;
 }
@@ -161,7 +230,17 @@ void RripSets::_updateStatsRequestedStore(candidate_t item) {
 }
 
 bool RripSets::find(candidate_t item) {
+    _touchTime(item);
     std::unordered_set<uint64_t> possible_bins = findSetNums(item);
+    for (uint64_t bin_num: possible_bins) {
+        _dropExpiredBin(bin_num);
+    }
+
+    if (_expired(item)) {
+        _set_stats["misses"]++;
+        return false;
+    }
+
     for (uint64_t bin_num: possible_bins) {
         auto it = _bins[bin_num].rrpv_to_items.begin();
         while (it != _bins[bin_num].rrpv_to_items.end()) {
@@ -213,7 +292,11 @@ double RripSets::ratioCapacityUsed() {
 }
 
 double RripSets::calcWriteAmp() {
-    return _set_stats["bytes_written"]/ (double) _set_stats["stores_requested_bytes"];
+    int64_t requested = _set_stats.get("stores_requested_bytes");
+    if (requested <= 0) {
+        return 0.0;
+    }
+    return _set_stats.get("bytes_written") / (double) requested;
 }
 
 double RripSets::ratioEvictedToCapacity() {
@@ -233,6 +316,10 @@ void RripSets::flushStats() {
     _set_stats["numHitItemsEvicted"] = 0;
     _set_stats["rripPromotions"] = 0;
     _set_stats["rripEvictions"] = 0;
+    _set_stats["expiredDrops"] = 0;
+    _set_stats["expiredBytesDropped"] = 0;
+    _set_stats["expiredSkippedStores"] = 0;
+    _set_stats["expiredBytesSkipped"] = 0;
 }
 
 uint64_t RripSets::calcMemoryConsumption() {
@@ -244,7 +331,17 @@ uint64_t RripSets::calcMemoryConsumption() {
 }
 
 bool RripSets::trackHit(candidate_t item) {
+    _touchTime(item);
     std::unordered_set<uint64_t> possible_bins = findSetNums(item);
+    for (uint64_t bin_num: possible_bins) {
+        _dropExpiredBin(bin_num);
+    }
+
+    if (_expired(item)) {
+        _set_stats["trackHitsFailed"]++;
+        return false;
+    }
+
     for (uint64_t bin_num: possible_bins) {
         auto it = _bins[bin_num].rrpv_to_items.begin();
         while (it != _bins[bin_num].rrpv_to_items.end()) {
@@ -278,6 +375,18 @@ void RripSets::enableDistTracking() {
 
 void RripSets::enableHitDistributionOverSets() {
     _hit_dist = true;
+}
+
+int64_t RripSets::bytesWritten() const {
+    return _set_stats.get("bytes_written");
+}
+
+int64_t RripSets::storesRequestedBytes() const {
+    return _set_stats.get("stores_requested_bytes");
+}
+
+uint64_t RripSets::capacity() const {
+    return _total_capacity;
 }
 
 } // namespace flashCache

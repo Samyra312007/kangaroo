@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 #include <libconfig.h++>
 
 #include "config.hpp"
@@ -76,12 +77,18 @@ void Cache::access(const parser::Request& req) {
         return;
     }
 
-    bool hit = this->find(id);
+    bool expired = id.expire_time != 0 && (int64_t)req.time >= id.expire_time;
     // Phase 11 TTL: an expired object never counts as a hit.
-    if (hit && id.expire_time != 0 && (int64_t)req.time >= id.expire_time) {
-        hit = false;
+    bool hit = expired ? false : this->find(id);
+    if (expired) {
+        globalStats["expiredMisses"]++;
+        globalStats["expiredMissSize"] += id.obj_size;
     }
     
+    if (_dynamic_admission) {
+        _dynamic_admission->noteAccess(id, hit);
+    }
+
     if (hit) {
         globalStats["hits"]++;
         globalStats["hitsSize"] += id.obj_size;
@@ -121,6 +128,7 @@ uint64_t Cache::getAccessesAfterFlush() {
 void Cache::trackAccesses() {
     globalStats["totalAccesses"]++;
     globalStats["accessesAfterFlush"]++;
+
 }
 
 void Cache::trackHistory(candidate_t id) {

@@ -12,9 +12,21 @@ struct candidate_t {
   mutable int hit_count;
   int64_t oracle_count;
   int64_t expire_time;
+  int64_t request_time;
 
   static candidate_t make(const parser::Request& req) { 
-    return candidate_t{.id=req.id, .obj_size=req.size(), .hit_count=0, .oracle_count=req.oracle_count, .expire_time=req.expire_time};
+    return candidate_t{
+      .id = req.id,
+      .obj_size = req.size(),
+      .hit_count = 0,
+      .oracle_count = req.oracle_count,
+      .expire_time = req.expire_time,
+      .request_time = (int64_t)req.time
+    };
+  }
+
+  inline bool expired(int64_t now) const {
+    return expire_time != 0 && now >= expire_time;
   }
 
   inline bool operator==(const candidate_t& that) const { 

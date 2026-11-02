@@ -77,8 +77,11 @@ double LogSimple::ratioCapacityUsed() {
 }
 
 double LogSimple::calcWriteAmp() {
-    double ret = _log_stats["bytes_written"]/ (double) _log_stats["stores_requested_bytes"];
-    return ret;
+    int64_t requested = _log_stats.get("stores_requested_bytes");
+    if (requested <= 0) {
+        return 0.0;
+    }
+    return _log_stats.get("bytes_written") / (double) requested;
 }
 
 void LogSimple::flushStats() {

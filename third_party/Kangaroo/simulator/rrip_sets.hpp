@@ -58,6 +58,10 @@ class RripSets : public virtual SetsAbstract {
         void enableDistTracking();
         void enableHitDistributionOverSets();
 
+        int64_t bytesWritten() const override;
+        int64_t storesRequestedBytes() const override;
+        uint64_t capacity() const override;
+
     private:
         struct Bin {
             // rrpv = re-reference pointer value
@@ -76,6 +80,11 @@ class RripSets : public virtual SetsAbstract {
         int _max_rrpv;
         bool _dist_tracking = false;
         bool _hit_dist = false;
+        int64_t _current_time = 0;
+
+        void _touchTime(const candidate_t& item);
+        bool _expired(const candidate_t& item) const;
+        void _dropExpiredBin(uint64_t bin_num);
 
         /* 
          * control promotion rrip where items reset to 0 on hit instead

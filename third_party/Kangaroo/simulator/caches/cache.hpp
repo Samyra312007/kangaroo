@@ -1,5 +1,6 @@
 #pragma once
 #include <libconfig.h++>
+#include "admission/admission.hpp"
 #include "parsers/parser.hpp"
 #include "stats/stats.hpp"
 #include "candidate.hpp"
@@ -47,6 +48,7 @@ protected:
     void flushStats();
     stats::StatsCollector* statsCollector = nullptr;
     stats::LocalStatsCollector& globalStats;
+    admission::Policy* _dynamic_admission = nullptr;
 
 private:
     CandidateMap<bool> _historyAccess;

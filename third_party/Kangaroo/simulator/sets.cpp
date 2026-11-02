@@ -32,6 +32,63 @@ Sets::Sets(uint64_t num_sets, uint64_t set_capacity,
     }
 }
 
+void Sets::_touchTime(const candidate_t& item) {
+    _current_time = std::max(_current_time, item.request_time);
+}
+
+bool Sets::_expired(const candidate_t& item) const {
+    return item.expire_time != 0 && _current_time >= item.expire_time;
+}
+
+void Sets::_dropExpiredBin(uint64_t bin_num) {
+    assert(bin_num < _num_sets);
+    Bin& bin = _bins[bin_num];
+    if (bin.items.empty()) {
+        return;
+    }
+
+    std::deque<candidate_t> filtered;
+    int64_t removed_before_no_hit = 0;
+    int64_t old_no_hit_loc = (int64_t) bin.no_hit_insert_loc;
+
+    int64_t idx = 0;
+    for (const auto& item : bin.items) {
+        if (_expired(item)) {
+            _set_stats["expiredDrops"]++;
+            _set_stats["expiredBytesDropped"] += item.obj_size;
+            bin.bin_size -= item.obj_size;
+            _total_size -= item.obj_size;
+            if (idx < old_no_hit_loc) {
+                removed_before_no_hit++;
+            }
+        } else {
+            filtered.push_back(item);
+        }
+        idx++;
+    }
+
+    if (!filtered.empty()) {
+        bin.items = std::move(filtered);
+        int64_t new_no_hit_loc = old_no_hit_loc - removed_before_no_hit;
+        if (new_no_hit_loc < 0) {
+            new_no_hit_loc = 0;
+        }
+        if ((int64_t) bin.items.size() < new_no_hit_loc) {
+            new_no_hit_loc = (int64_t) bin.items.size();
+        }
+        bin.no_hit_insert_loc = (uint64_t) new_no_hit_loc;
+        _set_stats["current_size"] = _total_size;
+        _rebuildBloom(bin_num);
+    } else {
+        bin.items.clear();
+        bin.bin_size = 0;
+        bin.no_hit_insert_loc = 0;
+        _total_size = 0;
+        _set_stats["current_size"] = _total_size;
+        _rebuildBloom(bin_num);
+    }
+}
+
 std::vector<candidate_t> Sets::_insert(candidate_t item, uint64_t bin_num) {
     assert((uint64_t) item.obj_size <= _set_capacity);
     std::unordered_set<uint64_t> potential_bins = findSetNums(item);
@@ -127,8 +184,17 @@ std::vector<candidate_t> Sets::insert(std::vector<candidate_t> items) {
     std::vector<bool> sets_touched(_num_sets, false);
     std::vector<candidate_t> evicted;
     for (auto item: items) {
+        _touchTime(item);
+        _updateStatsRequestedStore(item);
+        if (_expired(item)) {
+            _set_stats["expiredSkippedStores"]++;
+            _set_stats["expiredBytesSkipped"] += item.obj_size;
+            continue;
+        }
+
         uint64_t bin_num = *findSetNums(item).begin();
         assert(bin_num < _num_sets);
+        _dropExpiredBin(bin_num);
         Bin& bin = _bins[bin_num];
         if (!sets_touched[bin_num] && _nru) {
             bin.no_hit_insert_loc = _reorder_set_nru(bin_num);
@@ -138,7 +204,6 @@ std::vector<candidate_t> Sets::insert(std::vector<candidate_t> items) {
         sets_touched[bin_num] = true;
         std::vector<candidate_t> local_evict = _insert(item, bin_num);
         evicted.insert(evicted.end(), local_evict.begin(), local_evict.end());
-        _updateStatsRequestedStore(item);
         _rebuildBloom(bin_num);
     }
     uint64_t num_sets_touched = std::count(sets_touched.begin(), sets_touched.end(), true);
@@ -151,15 +216,33 @@ std::vector<candidate_t> Sets::insert(uint64_t set_num, std::vector<candidate_t>
     std::vector<candidate_t> evicted;
     assert(set_num < _num_sets);
     Bin& bin = _bins[set_num];
+    bool any_non_expired = false;
+    for (auto item: items) {
+        _touchTime(item);
+        _updateStatsRequestedStore(item);
+        if (_expired(item)) {
+            _set_stats["expiredSkippedStores"]++;
+            _set_stats["expiredBytesSkipped"] += item.obj_size;
+        } else {
+            any_non_expired = true;
+        }
+    }
+    if (!any_non_expired) {
+        return evicted;
+    }
+    _dropExpiredBin(set_num);
     if (_nru) {
         bin.no_hit_insert_loc = _reorder_set_nru(set_num);
     } else {
         bin.no_hit_insert_loc = bin.items.size();
     }
     for (auto item: items) {
+        _touchTime(item);
+        if (_expired(item)) {
+            continue;
+        }
         std::vector<candidate_t> local_evict = _insert(item, set_num);
         evicted.insert(evicted.end(), local_evict.begin(), local_evict.end());
-        _updateStatsRequestedStore(item);
         _rebuildBloom(set_num);
     }
     if (items.size() > 0) {
@@ -179,8 +262,10 @@ void Sets::_updateStatsRequestedStore(candidate_t item) {
 }
 
 bool Sets::find(candidate_t item) {
+    _touchTime(item);
     std::unordered_set<uint64_t> possible_bins = findSetNums(item);
     for (uint64_t bin_num: possible_bins) {
+        _dropExpiredBin(bin_num);
         if (!_bloomContains(bin_num, (uint64_t)item.id)) {
             continue;
         }
@@ -288,7 +373,11 @@ double Sets::ratioCapacityUsed() {
 }
 
 double Sets::calcWriteAmp() {
-    return _set_stats["bytes_written"]/ (double) _set_stats["stores_requested_bytes"];
+    int64_t requested = _set_stats.get("stores_requested_bytes");
+    if (requested <= 0) {
+        return 0.0;
+    }
+    return _set_stats.get("bytes_written") / (double) requested;
 }
 
 double Sets::ratioEvictedToCapacity() {
@@ -306,6 +395,10 @@ void Sets::flushStats() {
     _set_stats["hitsSharedWithLog"] = 0;
     _set_stats["trackHitsFailed"] = 0;
     _set_stats["numHitItemsEvicted"] = 0;
+    _set_stats["expiredDrops"] = 0;
+    _set_stats["expiredBytesDropped"] = 0;
+    _set_stats["expiredSkippedStores"] = 0;
+    _set_stats["expiredBytesSkipped"] = 0;
 }
 
 uint64_t Sets::calcMemoryConsumption() {
@@ -321,8 +414,10 @@ uint64_t Sets::calcMemoryConsumption() {
 }
 
 bool Sets::trackHit(candidate_t item) {
+    _touchTime(item);
     std::unordered_set<uint64_t> possible_bins = findSetNums(item);
     for (uint64_t bin_num: possible_bins) {
+        _dropExpiredBin(bin_num);
         uint64_t i = 0;
         for (candidate_t stored_item: _bins[bin_num].items) {
             if (stored_item == item) {
@@ -345,6 +440,18 @@ void Sets::enableDistTracking() {
 
 void Sets::enableHitDistributionOverSets() {
     _hit_dist = true;
+}
+
+int64_t Sets::bytesWritten() const {
+    return _set_stats.get("bytes_written");
+}
+
+int64_t Sets::storesRequestedBytes() const {
+    return _set_stats.get("stores_requested_bytes");
+}
+
+uint64_t Sets::capacity() const {
+    return _total_capacity;
 }
 
 } // namespace flashCache

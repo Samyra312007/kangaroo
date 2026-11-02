@@ -35,7 +35,16 @@ class LogAbstract {
             (void)set_num;
             return {};
         }
-        
+
+        /* Phase 10 AdaKanga controller hooks */
+        virtual void setCapacity(uint64_t capacity) { (void) capacity; }
+        virtual void setNumPartitions(int partitions) { (void) partitions; }
+        virtual uint64_t capacity() const { return 0; }
+        virtual int numPartitions() const { return 0; }
+        virtual uint64_t currentSize() const { return 0; }
+        virtual int64_t bytesWritten() const { return 0; }
+        virtual int64_t storesRequestedBytes() const { return 0; }
+
         /* ----------- Other Bookeeping --------------- */
 
         virtual double calcWriteAmp() = 0;
